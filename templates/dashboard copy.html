@@ -1,0 +1,55 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+  <h1>Dashboard <small> Welcome {{session.username}}</small></h1>
+  <a class="btn btn-success" href="/add_user"> Add User</a>
+  <hr>
+  <table class="table table-striped">
+    <tr>
+      <th>No</th>
+      <th>username</th>
+      <th>apikey</th>
+      <th>secretkey</th>
+      <th>스크립트번호</th>
+      <th>마진</th>
+      <th>최소주문금액</th>
+      <th>최대주문금액</th>
+      <th>최소주문비율</th>
+      <th>최대주문비율</th>
+      <th>레버리지</th>
+      <th>트레일링스톱</th>
+      <th>탈출수수료비율</th>
+      <th>재진입수수료비율</th>
+      <th>손절%</th>
+      <th>익절%</th>
+    </tr>
+    {% for user in users %}
+    
+    <tr>
+      <td>{{users.index(user) + 1}}</td>
+      <td>{{user[1]}}</td>
+      <td>{{user[2]}}</td>
+      <td>{{user[3]}}</td>
+      <td>{{user[4]}}</td>
+      <td>{{user[5]}}</td>
+      <td>{{user[6]}}</td>
+      <td>{{user[7]}}</td>
+      <td>{{user[8]}}</td>
+      <td>{{user[9]}}</td>
+      <td>{{user[10]}}</td>
+      <td>{{user[11]}}</td>
+      <td>{{user[12]}}</td>
+      <td>{{user[13]}}</td>
+      <td>{{user[14]}}</td>
+      <td>{{user[15]}}</td>
+
+      
+      <td><a href="edit_user/{{user[0]}}" class="btn btn-default pull-right">Edit</a></td>
+      <td><a href="delete_user/{{user[0]}}" class="btn btn-default pull-right">Delete</a></td>
+    </tr>
+    {% endfor %}
+  </table>
+{% endblock %}
+
+
+

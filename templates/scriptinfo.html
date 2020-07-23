@@ -1,0 +1,57 @@
+
+{% extends 'layout.html' %}
+
+{% block body %}
+{% from "includes/_formhelpers.html" import render_field %}
+  <h1>Dashboard <small> Welcome {{session.username}}</small></h1>
+  <form method='POST'>
+    <a class="btn btn-success" href="/add_scriptinfo"> Add Script</a>
+    <hr>
+    <table class="table table-striped">
+      <tr>
+        <th>No</th>
+        <th>스크립트번호</th>
+        <th>스크립트이름</th>
+        <th>버젼</th>
+        <th>현재pgSide포지션</th>
+        <th>long1</th>
+        <th>long2</th>
+        <th>long3</th>
+        <th>long4</th>
+        <th>long5</th>
+        <th>short1</th>
+        <th>short2</th>
+        <th>short3</th>
+        <th>short4</th>
+        <th>short5</th>
+      </tr>
+      {% for scriptdata in scriptdatas %}
+      <tr>
+        <td>{{scriptdata[0]}}</td>
+        <td>{{scriptdata[2]}}</td>
+        <td>{{scriptdata[3]}}</td>
+        <td>{{scriptdata[4]}}</td>
+        <td>{{scriptdata[5]}}</td>
+        <td>{{scriptdata[6]}}</td>
+        <td>{{scriptdata[7]}}</td>
+        <td>{{scriptdata[8]}}</td>
+        <td>{{scriptdata[9]}}</td>
+        <td>{{scriptdata[10]}}</td>
+        <td>{{scriptdata[11]}}</td>
+        <td>{{scriptdata[12]}}</td>
+        <td>{{scriptdata[13]}}</td>
+        <td>{{scriptdata[14]}}</td>
+        <td>{{scriptdata[15]}}</td>
+
+        <td><a href="edit_scriptinfo/{{scriptdata[1]}}" class="btn btn-default pull-right">Edit</a></td>
+        <td><a href="delete_scriptinfo/{{scriptdata[1]}}" class="btn btn-default pull-right">Delete</a></td>
+      </tr>
+      {% endfor %}
+
+  </form>
+
+
+
+
+  </table>
+{% endblock %}

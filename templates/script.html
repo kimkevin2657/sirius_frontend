@@ -1,0 +1,28 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+  <h1>Dashboard <small> Welcome {{session.username}}</small></h1>
+  <a class="btn btn-success" href="/add_script"> Add script</a>
+  <hr>
+  <table class="table table-striped">
+    <tr>
+      <th>No</th>
+
+    </tr>
+    {% for script in scripts %}
+    
+    <tr>
+      <td>{{script.index(user) + 1}}</td>
+      <td>{{script[1]}}</td>
+   
+
+      
+      <td><a href="edit_script/{{script[0]}}" class="btn btn-default pull-right">Edit</a></td>
+      <td><a href="delete_script/{{script[0]}}" class="btn btn-default pull-right">Delete</a></td>
+    </tr>
+    {% endfor %}
+  </table>
+{% endblock %}
+
+
+

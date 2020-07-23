@@ -1,0 +1,85 @@
+
+{% extends 'layout.html' %}
+
+{% block body %}
+{% from "includes/_formhelpers.html" import render_field %}
+  <h1>Dashboard <small> Welcome {{session.username}}</small></h1>
+  <form method='POST'>
+    <p><input type="submit" class="btn btn-primary" value="Save"></p>
+    <hr>
+    <table class="table table-striped">
+      <tr>
+        <th>username</th>
+        <th>apikey</th>
+        <th>secretkey</th>
+        <th>스크립트번호</th>
+        <th>마진</th>
+        <th>최소주문금액</th>
+        <th>최대주문금액</th>
+        <th>최소주문비율</th>
+        <th>최대주문비율</th>
+        <th>레버리지</th>
+        <th>트레일링스톱</th>
+        <th>탈출수수료비율</th>
+        <th>재진입수수료비율</th>
+        <th>손절</th>
+        <th>익절</th>
+      </tr>
+
+      <tr>
+
+        <td>
+          <input id='username' name='username' value={{user[0][1]}} type='text'>
+        </td>
+        <td>
+          <input id='apikey' name='apikey' value={{user[0][2]}} type='text'>
+        </td>
+        <td>
+          <input id='secretkey' name='secretkey' value={{user[0][3]}} type='text'>
+        </td>
+        <td>
+          <input id="scriptnumber" name='scriptnumber' value={{user[0][4]}} type='text'>
+        </td>
+        <td>
+          <input id='margin' name='margin' value={{user[0][5]}} type='text'>
+        </td>
+        <td>
+          <input id='minordcost' name='minordcost' value={{user[0][6]}} type='text'>
+        </td>
+        <td>
+          <input id='maxordcost' name='maxordcost' value={{user[0][7]}} type='text'>
+        </td>
+        <td>
+          <input id='minordrate' name='minordrate' value={{user[0][8]}} type='text'>
+        </td>
+        <td>
+          <input id='maxordrate' name='maxordrate' value={{user[0][9]}} type='text'>
+        </td>
+        <td>
+          <input id='leverage' name='leverage' value={{user[0][10]}} type='text'>
+        </td>
+        <td>
+          <input id='trailingstop' name='trailingstop' value={{user[0][11]}} type='text'>
+        </td>
+        <td>
+          <input id='exitcommissionratio' name='exitcommissionratio' value={{user[0][12]}} type='text'>
+        </td>
+        <td>
+          <input id='reentrycommissionratio' name='reentrycommissionratio' value={{user[0][13]}} type='text'>
+        </td>
+        <td>
+          <input id='stoploss' name='stoploss' value={{user[0][14]}} type='text'>
+        </td>
+        <td>
+          <input id='stopgain' name='stopgain' value={{user[0][15]}} type='text'>
+        </td>
+
+      </tr>
+
+  </form>
+
+
+
+
+  </table>
+{% endblock %}

@@ -1,0 +1,172 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+  <h1>Dashboard <small> Welcome {{session.username}}</small></h1>
+  <a class="btn btn-success" href="/add_user"> Add User</a>
+  <hr>
+
+  <script src="http://code.jquery.com/jquery.js"></script>
+  <script src="{{ url_for('static', filename='styles/dashboard.js') }}"></script>
+
+
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    
+    <style>
+    /* switch */
+.switch {
+    position: relative;
+    display: inline-block;
+   width: 73px;
+    height: 28px;
+
+  }
+  
+  .switch input { 
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+  
+  .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    -webkit-transition: .4s;
+    transition: .4s;
+  }
+  
+  .slider:before {
+    position: absolute;
+    content: "";
+    height: 22px;
+    width: 22px;
+    left: 4px;
+    bottom: 3px;
+    background-color: white;
+    -webkit-transition: .4s;
+    transition: .4s;
+  }
+  
+  input:checked + .slider {
+    background-color: #1c83dc;
+  }
+  
+  input:focus + .slider {
+    box-shadow: 0 0 1px ##1c83dc;
+  }
+  
+  input:checked + .slider:before {
+    -webkit-transform: translateX(26px);
+    -ms-transform: translateX(26px);
+    transform: translateX(43px);
+  }
+  
+  /* Rounded sliders */
+  .slider.round {
+    border-radius: 34px;
+  }
+  
+  .slider.round:before {
+    border-radius: 50%;
+  }
+/* switch */
+        
+        .lcs_label {
+    font-family: "Trebuchet MS", Helvetica, sans-serif;
+    font-size: 12px;
+    letter-spacing: 1px;
+    line-height: 18px;
+    color: #fff;
+    font-weight: bold;
+    position: absolute;
+    width: 33px;
+    top: 5px;
+    overflow: hidden;
+    text-align: center;
+    opacity: 0;
+    -webkit-transition: all .2s ease-in-out .1s;
+    -ms-transition: all .2s ease-in-out .1s;
+    transition: all .2s ease-in-out .1s;
+}
+        
+        .lcs_label.lcs_label_on {
+    left: -70px;
+    z-index: 6;
+}
+        
+        .lcs_label.lcs_label_off {
+    right: 10px;
+    opacity: 1;
+}
+    </style>
+    
+</head>
+
+  <table class="table table-striped">
+    <tr>
+      <th>No</th>
+      <th>username</th>
+      <th>apikey</th>
+      <th>secretkey</th>
+      <th>스크립트번호</th>
+      <th>마진</th>
+      <th>최소주문금액</th>
+      <th>최대주문금액</th>
+      <th>최소주문비율</th>
+      <th>최대주문비율</th>
+      <th>레버리지</th>
+      <th>트레일링스톱</th>
+      <th>탈출수수료비율</th>
+      <th>재진입수수료비율</th>
+      <th>손절%</th>
+      <th>익절%</th>
+    </tr>
+    {% for user in users %}
+    
+    <tr>
+      <td>{{users.index(user) + 1}}</td>
+      <td>{{user[1]}}</td>
+      <td>{{user[2]}}</td>
+      <td>{{user[3]}}</td>
+      <td>{{user[4]}}</td>
+      <td>{{user[5]}}</td>
+      <td>{{user[6]}}</td>
+      <td>{{user[7]}}</td>
+      <td>{{user[8]}}</td>
+      <td>{{user[9]}}</td>
+      <td>{{user[10]}}</td>
+      <td>{{user[11]}}</td>
+      <td>{{user[12]}}</td>
+      <td>{{user[13]}}</td>
+      <td>{{user[14]}}</td>
+      <td>{{user[15]}}</td>
+
+      <td>
+        {% if user[16] %}
+          <label class="switch">
+              <input type="checkbox" class='toggle' id='bottoggle{{user[0]}}' checked>
+              <span class="slider round"></span>
+          </label>
+        {% else %}
+          <label class="switch">
+            <input type="checkbox" class='toggle' id='bottoggle{{user[0]}}'>
+            <span class="slider round"></span>
+          </label>
+        {% endif %}
+      </td>
+      <td><a href="edit_user/{{user[0]}}" class="btn btn-default pull-right">Edit</a></td>
+      <td><a href="delete_user/{{user[0]}}" class="btn btn-default pull-right">Delete</a></td>
+    </tr>
+    {% endfor %}
+  </table>
+{% endblock %}
+
+
+

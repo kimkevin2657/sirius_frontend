@@ -1,0 +1,88 @@
+
+{% extends 'layout.html' %}
+
+{% block body %}
+{% from "includes/_formhelpers.html" import render_field %}
+  <h1>Dashboard <small> Welcome {{session.username}}</small></h1>
+  <form method='POST'>
+    <p><input type="submit" class="btn btn-primary" value="Add Script"></p>
+    <hr>
+    <table class="table table-striped">
+      <tr>
+        <th>스크립트번호</th>
+        <th>스크립트이름</th>
+        <th>버젼</th>
+        <th>현재pgSide포지션</th>
+      </tr>
+
+      <tr>
+        <td>
+          <input id='scriptnumber' name='scriptnumber' type='text'>
+        </td>
+        <td>
+          <input id='scriptname' name='scriptname' type='text'>
+        </td>
+        <td>
+          <input id='scriptversion' name='scriptversion' type='text'>
+        </td>
+        <td>
+          <input id="currentposition" name='currentposition' type='text'>
+        </td>
+      </tr>
+
+      <tr>
+        <th>long1</th>
+        <th>long2</th>
+        <th>long3</th>
+        <th>long4</th>
+        <th>long5</th>
+      </tr>
+      <tr>
+        <td>
+          <input id='long1' name='long1' type='text'>
+        </td>
+        <td>
+          <input id='long2' name='long2' type='text'>
+        </td>
+        <td>
+          <input id='long3' name='long3' type='text'>
+        </td>
+        <td>
+          <input id='long4' name='long4' type='text'>
+        </td>
+        <td>
+          <input id='long5' name='long5' type='text'>
+        </td>
+      </tr>
+      <tr>
+        <th>short1</th>
+        <th>short2</th>
+        <th>short3</th>
+        <th>short4</th>
+        <th>short5</th>
+      </tr>
+      <tr>
+        <td>
+          <input id='short1' name='short1' type='text'>
+        </td>
+        <td>
+          <input id='short2' name='short2' type='text'>
+        </td>
+        <td>
+          <input id='short3' name='short3' type='text'>
+        </td>
+        <td>
+          <input id='short4' name='short4' type='text'>
+        </td>
+        <td>
+          <input id='short5' name='short5' type='text'>
+        </td>
+      </tr>
+
+  </form>
+
+
+
+
+  </table>
+{% endblock %}

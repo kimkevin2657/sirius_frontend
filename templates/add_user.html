@@ -1,0 +1,93 @@
+
+{% extends 'layout.html' %}
+
+{% block body %}
+{% from "includes/_formhelpers.html" import render_field %}
+  <h1>Dashboard <small> Welcome {{session.username}}</small></h1>
+  <form method='POST'>
+    <p><input type="submit" class="btn btn-primary" value="Add New User"></p>
+    <hr>
+    <table class="table table-striped">
+      <tr>
+        <th>username</th>
+        <th>apikey</th>
+        <th>secretkey</th>
+        <th>스크립트번호</th>
+        <th>마진</th>
+      </tr>
+
+      <tr>
+        <td>
+          <input id='username' name='username' type='text'>
+        </td>
+        <td>
+          <input id='apikey' name='apikey' type='text'>
+        </td>
+        <td>
+          <input id='secretkey' name='secretkey' type='text'>
+        </td>
+        <td>
+          <input id='scriptnumber' name='scriptnumber' type='text'>
+        </td>
+        <td>
+          <input id='margin' name='margin' type='text'>
+        </td>
+      </tr>
+      <tr>
+        <th>최소주문금액</th>
+        <th>최대주문금액</th>
+        <th>최소주문비율</th>
+        <th>최대주문비율</th>
+        <th>레버리지</th>
+      </tr>
+
+      <tr>
+        <td>
+          <input id='minordcost' name='minordcost' type='text'>
+        </td>
+        <td>
+          <input id='maxordcost' name='maxordcost' type='text'>
+        </td>
+        <td>
+          <input id='minordrate' name='minordrate' type='text'>
+        </td>
+        <td>
+          <input id='maxordrate' name='maxordrate' type='text'>
+        </td>
+        <td>
+          <input id='leverage' name='leverage' type='text'>
+        </td>
+      </tr>
+      <tr>
+        <th>트레일링스톱</th>
+        <th>탈출수수료비율</th>
+        <th>재진입수수료비율</th>
+        <th>손절</th>
+        <th>익절</th>
+      </tr>
+
+      <tr>
+        <td>
+          <input id='trailingstop' name='trailingstop' type='text'>
+        </td>
+        <td>
+          <input id='exitcommissionratio' name='exitcommissionratio' type='text'>
+        </td>
+        <td>
+          <input id='reentrycommissionratio' name='reentrycommissionratio' type='text'>
+        </td>
+        <td>
+          <input id='stoploss' name='stoploss' type='text'>
+        </td>
+        <td>
+          <input id='stopgain' name='stopgain' type='text'>
+        </td>
+      </tr>
+
+  </form>
+
+
+
+
+  </table>
+{% endblock %}
