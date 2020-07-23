@@ -842,6 +842,8 @@ def transactionhistory(id):
         trades = []
 
         for i in range(len(data)-1,1,-1):
+            if not data[i][1] or not data[i][2] or not data[i][3] or not data[i][4] or not data[i][6] or not data[i][7] or not data[i][8] or not data[i][10] or not data[i][11] or not data[i][13] or not data[i][14]: 
+                continue
             midprice = 0.0
             if data[i][14]:
                 midprice = data[i][14]

@@ -8,7 +8,7 @@ import yaml
 import json
 import psycopg2
 import time
-
+import threading
 #app = Flask(__name__)
 
 
@@ -72,6 +72,34 @@ cur.execute("UPDATE usersetting SET enteringtrade = False WHERE id = %s", (6737,
 conn.commit()
 cur.execute("UPDATE usersetting SET positionamount = %s WHERE id = %s", (0.0, 8667))
 conn.commit()
+
+
+def tempfunc(val, val2):
+
+    DB_NAME = "postgres"
+    DB_USER = "postgres"
+    DB_PASS = "1520"
+    DB_HOST = "localhost"
+    DB_PORT = "5432" 
+
+
+
+    conn = psycopg2.connect(database=DB_NAME,user=DB_USER,password=DB_PASS,host=DB_HOST,port=DB_PORT)
+    cur = conn.cursor()
+    
+    time.sleep(5)
+    return val
+
+thread = threading.Thread(target=tempfunc, args=(1,3))
+thread.start()
+
+count = 0
+for i in range(0,1000):
+    print(i , '   waiting ' , count)
+    boolval = thread.is_alive()
+    print(boolval)
+    time.sleep(0.5)
+    count += 1
 
 
 #cur.execute("UPDATE usersetting SET bot = True WHERE id = %s", (3137,))
