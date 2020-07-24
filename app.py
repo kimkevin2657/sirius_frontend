@@ -728,8 +728,8 @@ def userval():
                     returns = 0.0
                     if entryamount: 
                         if abs(entryamount) > 0.0:
-                            profitbc = entryamountusd/bidprice - entryamount 
-                            returns = (entryamountusd/bidprice)/(entryamount) - 1.0
+                            profitbc = entryamountusd/bid - entryamount 
+                            returns = (entryamountusd/bid)/(entryamount) - 1.0
                             finalval = str(format(profitbc,".6f"))+'('+str(format(returns,".6f"))+'%)'
                             cur.close()
                             return jsonify({'result': finalval})
