@@ -901,7 +901,7 @@ def stoplossonoff():
 
         if str(request.form['idval'])[:8] == "tstoggle":
             print(' tstoggle activated ')
-            curridval = int(str(request.form['idval']))[8:]
+            curridval = int(str(request.form['idval'])[8:])
             print( ' current idval is  ', curridval)
             cur.execute("SELECT trailingstopbot FROM usersetting WHERE id = %s",(curridval,))
             currbool = cur.fetchall()[0][0]
