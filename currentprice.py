@@ -39,6 +39,7 @@ def on_message(ws, message):
         cur.execute("SELECT * FROM realtime")
         realtime = cur.fetchall()
         for i in range(0,len(realtime)):
+            print(' --- users at --- ', i)
             currid = realtime[i][0] 
             cur.execute("SELECT currentposition FROM usersetting WHERE id = %s", (currid,))
             currentposition = cur.fetchall()[0][0]
@@ -46,15 +47,18 @@ def on_message(ws, message):
             conn.commit()
             cur.execute("SELECT highprice, lowprice FROM realtime WHERE id = %s", (currid,))
             highlow = cur.fetchall()[0]
-            if highlow[0] == 0.0 and highlow[0] == 0.0:
+            print('highlow ' ,  highlow[0], highlow[1])
+            if highlow[0] == 0.0 and highlow[1] == 0.0:
                 cur.execute("UPDATE realtime SET (highprice, lowprice) = (%s, %s) WHERE id = %s", (currentprice, currentprice, currid))
                 conn.commit()
-            elif highlow[0] != 0.0:
+            if highlow[0] != 0.0:
                 if highlow[0] < currentprice:
+                    print(' updating high price ' )
                     cur.execute("UPDATE realtime SET highprice = %s WHERE id = %s", (currentprice, currid))
                     conn.commit()
-            elif highlow[0] != 0.0:
+            if highlow[1] != 0.0:
                 if highlow[1] > currentprice:
+                    print( 'updating low price ')
                     cur.execute("UPDATE realtime SET lowprice = %s WHERE id = %s", (currentprice, currid))
                     conn.commit()
 
@@ -71,7 +75,7 @@ def on_close(ws):
 
 def on_open(ws):
     print("### open ###")
-    
+
 
 def run(endpoint):
     websocket.enableTrace(True)

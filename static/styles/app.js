@@ -99,6 +99,10 @@ $(document).ready(function(){
             return element.id;
         });
 
+        var bestrevenueids = Array.prototype.slice.call(document.querySelectorAll('.bestrevenue')).map(function ( element ) {
+            return element.id;
+        });
+
         currpositionids.forEach(element => {
             req = $.ajax({
                 url : '/userval',
@@ -158,6 +162,18 @@ $(document).ready(function(){
                 url : '/userval',
                 type : 'POST',
                 data : {'val': 'profitreturn', 'idval': element}
+            });
+            req.done(function(data){
+                $('#'+element).text(data.result);
+            });
+
+        });
+
+        bestrevenueids.forEach(element => {
+            req = $.ajax({
+                url : '/userval',
+                type : 'POST',
+                data : {'val': 'bestrevenue', 'idval': element}
             });
             req.done(function(data){
                 $('#'+element).text(data.result);

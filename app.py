@@ -249,11 +249,11 @@ def dashboard():
                     username = userinfodata[j][1]
                     apikey = userinfodata[j][4][:5]
                     secret = userinfodata[j][5][:5]
-                    exitcom = userinfodata[j][8]
+                    exitcom = userinfodata[j][8]*100
                     reentry = userinfodata[j][9]
 
             print(i, '   ', username, '   ', usersettingdata[i][13])
-            users.append([usersettingdata[i][0], username, apikey, secret, usersettingdata[i][2], float(usersettingdata[i][4])*100, usersettingdata[i][5], usersettingdata[i][6], float(usersettingdata[i][7])*100, float(usersettingdata[i][8])*100, usersettingdata[i][10], usersettingdata[i][9], exitcom, reentry, float(usersettingdata[i][14])*100, float(usersettingdata[i][15])*100, usersettingdata[i][13]])
+            users.append([usersettingdata[i][0], username, apikey, secret, usersettingdata[i][2], float(usersettingdata[i][4])*100, usersettingdata[i][5], usersettingdata[i][6], float(usersettingdata[i][7])*100, float(usersettingdata[i][8]), usersettingdata[i][10], usersettingdata[i][9], exitcom, reentry, float(usersettingdata[i][14])*100, float(usersettingdata[i][15])*100, usersettingdata[i][13]])
 
 
 
@@ -343,7 +343,7 @@ def edit_user(id):
                     username = userinfodata[j][1]
                     apikey = userinfodata[j][4]
                     secret = userinfodata[j][5]
-                    exitcom = userinfodata[j][8]
+                    exitcom = userinfodata[j][8]*100
                     reentry = userinfodata[j][9]
             user.append([usersettingdata[i][0], username, apikey, secret, usersettingdata[i][2], float(usersettingdata[i][4])*100, usersettingdata[i][5], usersettingdata[i][6], float(usersettingdata[i][7])*100, float(usersettingdata[i][8])*100, usersettingdata[i][10], usersettingdata[i][9], exitcom, reentry, float(usersettingdata[i][14])*100, float(usersettingdata[i][15])*100])
 
@@ -633,17 +633,25 @@ def userval():
             cur.execute("SELECT * FROM usersetting WHERE id = %s", (idval,))
             usersetting = cur.fetchall()
             entryprice = 0.0
-
-            if usersetting[0][3][:4] == 'long':
-                sqlstr = "SELECT * FROM "+'a'+str(idval)
-                cur.execute(sqlstr)
-                trades = cur.fetchall()
-                trades = list(trades)
-                trades = sorted(trades)
-                recent = trades[-1]
-                if recent[6]:
-                    entryprice = '{:,.1f}'.format(recent[6])
+            low = usersetting[0][15]
+            sqlstr = "SELECT * FROM "+'a'+str(idval)
+            cur.execute(sqlstr)
+            trades = cur.fetchall()
+            trades = list(trades)
+            trades = sorted(trades)
+            recent = trades[-1]
             cur.close()
+
+            if usersetting[0][3][:5] == 'short':
+                loss = float(recent[6]) - float(recent[6])*float(low)
+                if loss:
+                    entryprice = '{:,.1f}'.format(loss)
+            
+            if usersetting[0][3][:4] == 'long':
+                loss = float(recent[6]) + float(recent[6])*float(low)
+                if loss:
+                    entryprice = '{:,.1f}'.format(loss)
+            
             return jsonify({'result': entryprice})
 
         if request.form['val'] == 'shortentryprice':
@@ -652,17 +660,54 @@ def userval():
             cur.execute("SELECT * FROM usersetting WHERE id = %s", (idval,))
             usersetting = cur.fetchall()
             entryprice = 0.0
+            low = usersetting[0][14]
+            sqlstr = "SELECT * FROM "+'a'+str(idval)
+            cur.execute(sqlstr)
+            trades = cur.fetchall()
+            trades = list(trades)
+            trades = sorted(trades)
+            recent = trades[-1]
+            cur.close()
 
             if usersetting[0][3][:5] == 'short':
-                sqlstr = "SELECT * FROM "+'a'+str(idval)
-                cur.execute(sqlstr)
-                trades = cur.fetchall()
-                trades = list(trades)
-                trades = sorted(trades)
-                recent = trades[-1]
-                if recent[6]:
-                    entryprice = '{:,.1f}'.format(recent[6])
+                loss = float(recent[6]) + float(recent[6])*float(low)
+                if loss:
+                    entryprice = '{:,.1f}'.format(loss)
+            
+            if usersetting[0][3][:4] == 'long':
+                loss = float(recent[6]) - float(recent[6])*float(low)
+                if loss:
+                    entryprice = '{:,.1f}'.format(loss)
+            
+            return jsonify({'result': entryprice})
+
+        if request.form['val'] == 'bestrevenue':
+            tempidval = request.form['idval']
+            idval = int(str(tempidval)[11:])
+            cur.execute("SELECT * FROM usersetting WHERE id = %s", (idval,))
+            usersetting = cur.fetchall()
+            cur.execute("SELECT * FROM userinfo WHERE id = %s", (idval,))
+            userinfo = cur.fetchall()
+            entryprice = 0.0
+            revenue = userinfo[0][8]
+            sqlstr = "SELECT * FROM "+'a'+str(idval)
+            cur.execute(sqlstr)
+            trades = cur.fetchall()
+            trades = list(trades)
+            trades = sorted(trades)
+            recent = trades[-1]
             cur.close()
+
+            if usersetting[0][3][:5] == 'short':
+                loss = float(recent[6]) - float(recent[6])*float(revenue)
+                if loss:
+                    entryprice = '{:,.1f}'.format(loss)
+            
+            if usersetting[0][3][:4] == 'long':
+                loss = float(recent[6]) + float(recent[6])*float(revenue)
+                if loss:
+                    entryprice = '{:,.1f}'.format(loss)
+            
             return jsonify({'result': entryprice})
 
 
