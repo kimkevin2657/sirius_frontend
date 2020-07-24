@@ -925,7 +925,7 @@ def botonoff():
         cur.execute("SELECT username FROM userinfo where id = %s", (curridval,))
         username = cur.fetchall()[0][0]
         print(curridval, '   ', username, '     ', currbool, '   ', newbool)
-        cur.execute("UPDATE usersetting SET (bot, stoplossbot, stopgainbot) = (%s,%s,%s) WHERE id = %s", (newbool, newbool, newbool, curridval))
+        cur.execute("UPDATE usersetting SET (bot, stoplossbot, stopgainbot, trailingstopbot) = (%s,%s,%s,%s) WHERE id = %s", (newbool, newbool, newbool, newbool, curridval))
         conn.commit()
         cur.close()
         return jsonify({'result': 'success'})
