@@ -295,7 +295,7 @@ def add_user():
         createtable = "CREATE TABLE "+tradedbname+" ( ID SERIAL PRIMARY KEY, DATEVAL VARCHAR(256), ENTRYHOUR VARCHAR(256), ENDHOUR VARCHAR(256), ENTRYAMOUNT DOUBLE PRECISION, PROFIT DOUBLE PRECISION, ENTRYPRICE DOUBLE PRECISION, ENDPRICE DOUBLE PRECISION, PARTITIONS DOUBLE PRECISION, STARTASSET DOUBLE PRECISION, PROFITBC DOUBLE PRECISION, POSITION VARCHAR(256), TRADETYPE VARCHAR(256), WALLETBALANCE DOUBLE PRECISION, AVGPRICE DOUBLE PRECISION, AVGPRICE DOUBLE PRECISION)"
         cur.execute(createtable)
         conn.commit()
-        cur.execute("INSERT INTO realtime (id, xbtusd, balance, balancebc, marginleverage) VALUES (%s, %s, %s, %s, %s)",(newid, 0.0,0.0,0.0, 0.0))
+        cur.execute("INSERT INTO realtime (id, xbtusd, balance, balancebc, marginleverage, highprice, lowprice) VALUES (%s, %s, %s, %s, %s, %s, %s)",(newid, 0.0,0.0,0.0, 0.0, 0.0, 0.0))
         conn.commit()
 
         apikey = {'exchange': 'bitmex', 'apikey': request.form['apikey'], 'secret': request.form['secretkey']}
@@ -728,7 +728,7 @@ def userval():
                     returns = 0.0
                     if entryamount: 
                         if abs(entryamount) > 0.0:
-                            profitbc = entryamountusd/bidprice - entryamount 
+                            profitbc = entryamountusd/bid - entryamount 
                             returns = (entryamountusd/bidprice)/(entryamount) - 1.0
                             finalval = str(format(profitbc,".6f"))+'('+str(format(returns,".6f"))+'%)'
                             cur.close()
