@@ -900,9 +900,12 @@ def stoplossonoff():
             cur.close()
 
         if str(request.form['idval'])[:8] == "tstoggle":
+            print(' tstoggle activated ')
             curridval = int(str(request.form['idval']))[8:]
+            print( ' current idval is  ', curridval)
             cur.execute("SELECT trailingstopbot FROM usersetting WHERE id = %s",(curridval,))
             currbool = cur.fetchall()[0][0]
+            print( ' current ts bot bool is  ', currbool)
             newbool = not currbool
             cur.execute("UPDATE usersetting SET trailingstopbot = %s WHERE id = %s", (newbool, curridval))
             conn.commit()
