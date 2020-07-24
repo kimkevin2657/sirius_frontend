@@ -191,11 +191,19 @@
                     <td>
                     </td>
                     <td>
-                        <label class="switch">
-                            <input type="checkbox" class='toggletemp' id='tstoggle{{staticval[1]}}' checked>
-                            <span class="slider round"></span>
-                        </label>
-                        <p class='textbottoggle' id='texttstoggle{{staticval[1]}}'>t.s.On/Off</p>
+                        {% if staticval[12] %}
+                            <label class="switch">
+                                <input type="checkbox" class='toggle' id='tstoggle{{staticval[1]}}' checked>
+                                <span class="slider round"></span>
+                            </label>
+                            <p class='textbottoggle' id='texttstoggle{{staticval[1]}}'>t.s.On/Off</p>
+                        {% else %}
+                            <label class="switch">
+                                <input type="checkbox" class='toggle' id='tstoggle{{staticval[1]}}'>
+                                <span class="slider round"></span>
+                            </label>
+                            <p class='textbottoggle' id='texttstoggle{{staticval[1]}}'>t.s.On/Off</p>
+                        {% endif %}
                     </td>
                     <td>
 

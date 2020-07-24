@@ -533,7 +533,7 @@ def positionAll():
             for j in range(0,len(userinfo)):
                 if userinfo[j][0] == currid:
                     username = userinfo[j][1]
-            staticvals.append([i+1, usersetting[i][0], username, str(usersetting[i][4]*100)+'%', str(usersetting[i][10])+'X', str(usersetting[i][4]*usersetting[i][10])+'X', usersetting[i][2], usersetting[i][16], currscript[0][5], currscript[0][6], usersetting[i][17], usersetting[i][16]])
+            staticvals.append([i+1, usersetting[i][0], username, str(usersetting[i][4]*100)+'%', str(usersetting[i][10])+'X', str(usersetting[i][4]*usersetting[i][10])+'X', usersetting[i][2], usersetting[i][16], currscript[0][5], currscript[0][6], usersetting[i][17], usersetting[i][16], usersetting[i][18]])
         
 
         initialbalances = 0.0
@@ -880,20 +880,33 @@ def transactionhistory(id):
 def stoplossonoff():
     cur = conn.cursor()
     if request.method == 'POST':
-        curridval = int(str(request.form['idval'])[14:])
         if str(request.form['idval'])[:8] == 'stopgain':
+            curridval = int(str(request.form['idval'])[14:])
             cur.execute("SELECT stopgainbot FROM usersetting WHERE id = %s", (curridval,))
             currbool = cur.fetchall()
             newbool = not currbool[0][0]
             cur.execute("UPDATE usersetting SET stopgainbot = %s WHERE id = %s",(newbool, curridval))
             conn.commit()
+            cur.close()
 
         if str(request.form['idval'])[:8] == 'stoploss':
+            curridval = int(str(request.form['idval'])[14:])
             cur.execute("SELECT stoplossbot FROM usersetting WHERE id = %s", (curridval,))
             currbool = cur.fetchall()
             newbool = not currbool[0][0]
             cur.execute("UPDATE usersetting SET stoplossbot = %s WHERE id = %s",(newbool, curridval))
             conn.commit()
+            cur.close()
+
+        if str(request.form['idval'])[:8] == "tstoggle":
+            curridval = int(str(request.form['idval']))[8:]
+            cur.execute("SELECT trailingstopbot FROM usersetting WHERE id = %s",(curridval,))
+            currbool = cur.fetchall()[0][0]
+            newbool = not currbool
+            cur.execute("UPDATE usersetting SET trailingstopbot = %s WHERE id = %s", (newbool, curridval))
+            conn.commit()
+            cur.close()
+
         cur.close()
         return jsonify({'result': 'success'})
     return ''

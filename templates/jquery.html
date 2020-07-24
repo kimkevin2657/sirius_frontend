@@ -1,0 +1,54 @@
+<script src="http://code.jquery.com/jquery.js"></script>
+
+
+
+<script>
+    $(document).ready(function(){
+        $('.toggle').each(function(){
+            $(this).click(function(){
+                var idval = $(this).attr('id');
+                req = $.ajax({
+                    url: '/something',
+                    type: 'POST',
+                    data: {'idval': idval}
+                });
+                req.done(function(data){
+                    $('#'+idval).text(data.result)
+                });
+            });
+        });
+
+    });
+</script>
+
+
+<script>
+    $(document).ready(function(){
+
+
+        function update(){
+            var currpositionids = Array.prototype.slice.call(document.querySelectorAll('.currposition')).map(function ( element ) {
+                return element.id;
+            });
+
+            currpositionids.forEach(element => {
+                req = $.ajax({
+                    url: '/something',
+                    type: 'POST',
+                    data: {'something': element}
+                });
+                req.done(function(data){
+                    $('#'+element).text(data.result);
+                });
+            });
+        };
+
+    });
+</script>
+
+
+
+def viewFunction(request):
+    if request.method == 'POST':
+        data = request.POST.get('something')
+        

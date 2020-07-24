@@ -42,6 +42,21 @@ def on_message(ws, message):
             currid = realtime[i][0] 
             cur.execute("UPDATE realtime SET xbtusd = %s WHERE id = %s",(currentprice, currid))
             conn.commit()
+            cur.execute("SELECT highprice, lowprice FROM realtime WHERE id = %s", (currid,))
+            highlow = cur.fetchall()[0]
+            if highlow[0] == 0.0 and highlow[0] == 0.0:
+                cur.execute("UPDATE realtime SET (highprice, lowprice) = (%s, %s) WHERE id = %s", (currentprice, currentprice, currid))
+                conn.commit()
+            elif highlow[0] != 0.0:
+                if highlow[0] < currentprice:
+                    cur.execute("UPDATE realtime SET highprice = %s WHERE id = %s", (currentprice, currid))
+                    conn.commit()
+            elif highlow[0] != 0.0:
+                if highlow[1] > currentprice:
+                    cur.execute("UPDATE realtime SET lowprice = %s WHERE id = %s", (currentprice, currid))
+                    conn.commit()
+
+
 
 
 def on_error(ws, error):
@@ -71,3 +86,58 @@ if __name__ == "__main__":
     endpoint = 'wss://testnet.bitmex.com/realtime?'+command
     
     run(endpoint)
+
+
+
+
+
+
+
+
+
+
+
+    entryprice = 9700    # 진입가격
+bid = 9900           # 매수호가
+highprice = 10500    # 고점
+set_ts = 0.764       #트레일링스탑 설정값
+set_lowper = 0.01    # 수수료(최소수익구간)설정값
+
+
+
+
+tsprice =  entryprice + (highprice - entryprice)*set_ts # 트레일링스탑 price
+lowrevenue = entryprice + entryprice*set_lowper         # 최소수익 price
+position = 'long'    # 현재 포지션
+
+if position == 'long':
+    if bid < tsprice :
+        if highprice > entryprice :
+            if bid > lowrevenue:
+                print('트레일링스탑')
+            else:
+                print('bid < lowrevenue')
+        else:
+            print('highprice < entryprice :')
+    else:
+        print('bid > tsprice :')
+        
+
+        
+또는
+
+if position == 'long' and bid < tsprice and highprice > entryprice and bid > lowrevenue:
+    print('트레일링스탑')
+
+
+
+
+
+
+tsprice = entryprice - (lowprice - entryprice)*set_ts
+lowrevenue = entryprice - entryprice*set_lowper
+
+if position == 'short' and ask > tsprice and lowprice < entryprice and ask < lowrevenue:
+    t.s.  
+
+    convert lowprice = 0 
