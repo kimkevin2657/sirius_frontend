@@ -103,6 +103,10 @@ $(document).ready(function(){
             return element.id;
         });
 
+        var trailingpriceids = Array.prototype.slice.call(document.querySelectorAll('.trailingprice')).map(function ( element ) {
+            return element.id;
+        });
+
         currpositionids.forEach(element => {
             req = $.ajax({
                 url : '/userval',
@@ -174,6 +178,18 @@ $(document).ready(function(){
                 url : '/userval',
                 type : 'POST',
                 data : {'val': 'bestrevenue', 'idval': element}
+            });
+            req.done(function(data){
+                $('#'+element).text(data.result);
+            });
+
+        });
+
+        trailingpriceids.forEach(element => {
+            req = $.ajax({
+                url : '/userval',
+                type : 'POST',
+                data : {'val': 'trailingprice', 'idval': element}
             });
             req.done(function(data){
                 $('#'+element).text(data.result);

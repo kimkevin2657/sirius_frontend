@@ -711,6 +711,40 @@ def userval():
             return jsonify({'result': entryprice})
 
 
+        if request.form['val'] == 'trailingprice':
+            tempidval = request.form['idval']
+            idval = int(str(tempidval)[13:])
+            cur.execute("SELECT * FROM usersetting WHERE id = %s", (idval,))
+            usersetting = cur.fetchall()
+            cur.execute("SELECT * FROM realtime WHERE id = %s", (idval,))
+            realtime = cur.fetchall()
+            entryprice = 0.0
+            tsprice = usersetting[0][9]
+            sqlstr = "SELECT * FROM "+'a'+str(idval)
+            cur.execute(sqlstr)
+            trades = cur.fetchall()
+            trades = list(trades)
+            trades = sorted(trades)
+            recent = trades[-1]
+            high = realtime[0][11]
+            low = realtime[0][12]
+            cur.close()
+
+            if usersetting[0][3][:5] == 'short':
+                loss = float(recent[6]) - (float(recent[6]) - float(low))*(tsprice*0.01)
+                if loss:
+                    entryprice = '{:,.1f}'.format(loss)
+            
+            if usersetting[0][3][:4] == 'long':
+                loss = float(recent[6]) + (float(high) - float(recent[6]))*(tsprice*0.01)
+                if loss:
+                    entryprice = '{:,.1f}'.format(loss)
+            
+            return jsonify({'result': entryprice})
+
+
+
+
         if request.form['val'] == 'entryprice': 
             tempidval = request.form['idval']
             idval = int(str(tempidval)[10:])
