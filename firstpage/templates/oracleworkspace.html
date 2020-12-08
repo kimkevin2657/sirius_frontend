@@ -1,0 +1,183 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+  <h1>Workspace <small> Welcome {{session.username}}</small></h1>
+  <input type='text' class='firstchart' placeholder='search your first chart here' style="width: 230px;" id='firstchart'>
+  <input type='text' class='secondchart' placeholder='search your second chard here' style="width: 230px;" id='secondchart'>
+  <a class="btn btn-success searchbutton">Search</a>
+  <hr>
+
+  <script src="http://code.jquery.com/jquery.js"></script>
+  <script src="{{ url_for('static', filename='styles/dashboard.js') }}"></script>
+
+
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    
+    <style>
+    /* switch */
+.firstchart{
+  margin-left: 10px;
+  float:left
+}
+.secondchart{
+  margin-left: 10px;
+  float:left;
+}
+.searchbutton{
+  margin-left: 10px;
+  float:left;
+}
+.switch {
+    position: relative;
+    display: inline-block;
+   width: 73px;
+    height: 28px;
+
+  }
+  
+  .switch input { 
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+  
+  .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    -webkit-transition: .4s;
+    transition: .4s;
+  }
+  
+  .slider:before {
+    position: absolute;
+    content: "";
+    height: 22px;
+    width: 22px;
+    left: 4px;
+    bottom: 3px;
+    background-color: white;
+    -webkit-transition: .4s;
+    transition: .4s;
+  }
+  
+  input:checked + .slider {
+    background-color: #1c83dc;
+  }
+  
+  input:focus + .slider {
+    box-shadow: 0 0 1px ##1c83dc;
+  }
+  
+  input:checked + .slider:before {
+    -webkit-transform: translateX(26px);
+    -ms-transform: translateX(26px);
+    transform: translateX(43px);
+  }
+  
+  /* Rounded sliders */
+  .slider.round {
+    border-radius: 34px;
+  }
+  
+  .slider.round:before {
+    border-radius: 50%;
+  }
+/* switch */
+        
+        .lcs_label {
+    font-family: "Trebuchet MS", Helvetica, sans-serif;
+    font-size: 12px;
+    letter-spacing: 1px;
+    line-height: 18px;
+    color: #fff;
+    font-weight: bold;
+    position: absolute;
+    width: 33px;
+    top: 5px;
+    overflow: hidden;
+    text-align: center;
+    opacity: 0;
+    -webkit-transition: all .2s ease-in-out .1s;
+    -ms-transition: all .2s ease-in-out .1s;
+    transition: all .2s ease-in-out .1s;
+}
+        
+        .lcs_label.lcs_label_on {
+    left: -70px;
+    z-index: 6;
+}
+        
+        .lcs_label.lcs_label_off {
+    right: 10px;
+    opacity: 1;
+}
+.chart {
+  margin-top: 15px;
+  height: 50%;
+  width: 100%;
+}
+.parentchartdiv{
+  height: 500px;
+}
+    </style>
+    
+</head>
+
+  <table class="table table-striped">
+  </table>
+
+  <div class='parentchartdiv'> 
+    <div class='chart' id="tradingview_f6874"></div>
+    <div class='chart' id="tradingview_f6875"></div>
+  </div>
+
+  <!-- TradingView Widget BEGIN -->
+
+  <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
+  <script type="text/javascript">
+  new TradingView.widget(
+  {
+  "autosize": true,
+  "symbol": "SPY",
+  "interval": "D",
+  "timezone": "Etc/UTC",
+  "theme": "light",
+  "style": "1",
+  "locale": "en",
+  "toolbar_bg": "#f1f3f6",
+  "enable_publishing": false,
+  "allow_symbol_change": true,
+  "container_id": "tradingview_f6874"
+}
+  );
+  </script>
+    <script type="text/javascript">
+      new TradingView.widget(
+      {
+      "autosize": true,
+      "symbol": "AMEX:SPY",
+      "interval": "D",
+      "timezone": "Etc/UTC",
+      "theme": "light",
+      "style": "1",
+      "locale": "en",
+      "toolbar_bg": "#f1f3f6",
+      "enable_publishing": false,
+      "allow_symbol_change": true,
+      "container_id": "tradingview_f6875"
+    }
+      );
+      </script>
+<!-- TradingView Widget END -->
+{% endblock %}
+
+
+
