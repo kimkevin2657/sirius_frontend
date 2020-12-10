@@ -1,0 +1,329 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+{% from "includes/_formhelpers.html" import render_field %}
+
+
+
+<script src="http://code.jquery.com/jquery.js"></script>
+<script src="{{ url_for('static', filename='styles/app.js') }}"></script>
+<link href="{{ url_for('static', filename='styles/position.css') }}" rel="stylesheet">
+
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    
+    <style>
+    /* switch */
+.switch {
+    position: relative;
+    display: inline-block;
+   width: 73px;
+    height: 28px;
+
+  }
+  
+  .switch input { 
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+  
+  .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    -webkit-transition: .4s;
+    transition: .4s;
+  }
+  
+  .slider:before {
+    position: absolute;
+    content: "";
+    height: 22px;
+    width: 22px;
+    left: 4px;
+    bottom: 3px;
+    background-color: white;
+    -webkit-transition: .4s;
+    transition: .4s;
+  }
+  
+  input:checked + .slider {
+    background-color: #1c83dc;
+  }
+  
+  input:focus + .slider {
+    box-shadow: 0 0 1px ##1c83dc;
+  }
+  
+  input:checked + .slider:before {
+    -webkit-transform: translateX(26px);
+    -ms-transform: translateX(26px);
+    transform: translateX(43px);
+  }
+  
+  /* Rounded sliders */
+  .slider.round {
+    border-radius: 34px;
+  }
+  
+  .slider.round:before {
+    border-radius: 50%;
+  }
+/* switch */
+        
+        .lcs_label {
+    font-family: "Trebuchet MS", Helvetica, sans-serif;
+    font-size: 12px;
+    letter-spacing: 1px;
+    line-height: 18px;
+    color: #fff;
+    font-weight: bold;
+    position: absolute;
+    width: 33px;
+    top: 5px;
+    overflow: hidden;
+    text-align: center;
+    opacity: 0;
+    -webkit-transition: all .2s ease-in-out .1s;
+    -ms-transition: all .2s ease-in-out .1s;
+    transition: all .2s ease-in-out .1s;
+}
+        
+        .lcs_label.lcs_label_on {
+    left: -70px;
+    z-index: 6;
+}
+        
+        .lcs_label.lcs_label_off {
+    right: 10px;
+    opacity: 1;
+}
+.searchbutton2 {
+    float:right;
+    margin-left:600px;
+    margin-bottom:15px;
+}
+    </style>
+    
+</head>
+
+
+
+<div class="w-container">
+    <div class="positionTitle">
+        <h2 class="title">Positions</h2>
+        <form action="" method='POST'>
+            <input type='submit' name='transactionhistory' value='Transaction History' class="btn btn-success searchbutton2">
+        </form>
+    </div>
+    <br>
+    <table class="head">
+        <tr>
+            <td>Starting Balance</td>
+            <td>{{totalusers[0]}}</td>
+            <td>Total Profit</td>
+            <td><p class="totalprofitxbt" id="totalprofitxbt"></p>{{totalusers[1]}}</td>
+        </tr>
+        <tr>
+            <td>Current Balance</td>
+            <td><p class="currtotalbalance" id="currtotalbalance"></p>{{totalusers[2]}}</td>
+            <td>Total Return</td>
+            <td><p class="totalreturns" id="totalreturns"></p>{{totalusers[3]}}</td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td><strong>Current Price</strong></td>
+            <td><p class="tickerxbtusd" id='grandxbtusd'></p></td>
+        </tr>
+        <tr>
+            <td style="background-color: rgba(199, 199, 199, 0.123);"></td id='총자산 합'>
+            <td style="background-color: rgba(199, 199, 199, 0.123); font-weight: bold"><p class="currtotalbalance" id="currtotalbalance2">{{totalusers[2]}}</p></td>
+            <td style="background-color: rgba(199, 199, 199, 0.123); white-space: nowrap;"></td id='미실현손익 합'>
+            <td style="background-color: rgba(199, 199, 199, 0.123); font-weight: bold">0.00(0.00%)</td>
+        </tr>
+    </table>
+</div>
+
+<form action="/manualorder" method="POST">
+{% for staticval in staticvals %}
+<div class="w-container">
+    <div class="tableBox">
+        <table style="padding-bottom: 20px;">
+            <tbody>
+                <tr>
+                    <td colspan="2">
+                        <span class="text-1"></span>
+                        <script>
+                            document.getElementById('result').innerHTML
+                        </script>
+                    </td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+
+                <tr>
+                    <td colspan="2">
+                        <span>{{staticval[0]}}</span>
+                    </td>
+                    <td>
+                        <span class="text-2"><p class="currposition" id="currposition{{staticval[1]}}"></p></span>
+                    </td>
+                    <td>
+                        <span class="ti-1">t.s</span>
+                        <span class="text-2"><p class="trailingprice" id="trailingprice{{staticval[1]}}"></span>
+                    </td>
+                    <td>
+                        <span class="ti-1">익절</span>
+                        <span class="text-2"><p class="longentryprice" id="longentryprice{{staticval[1]}}"></p></span>
+                    </td>
+                    <td>
+                        <span class="ti-1">손절</span>
+                        <span class="text-2"><p class="shortentryprice" id="shortentryprice{{staticval[1]}}"></p></span>
+                    </td>
+                    <td>
+                        <span class="ti-1">최소수익</span>
+                        <span class="text-2"><p class="bestrevenue" id="bestrevenue{{staticval[1]}}"></p></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td colspan="2"></td>
+                    <td>
+                    </td>
+                    <td>
+                        {% if staticval[12] %}
+                            <label class="switch">
+                                <input type="checkbox" class='toggle' id='tstoggle{{staticval[1]}}' checked>
+                                <span class="slider round"></span>
+                            </label>
+                            <p class='textbottoggle' id='texttstoggle{{staticval[1]}}'>t.s.On/Off</p>
+                        {% else %}
+                            <label class="switch">
+                                <input type="checkbox" class='toggle' id='tstoggle{{staticval[1]}}'>
+                                <span class="slider round"></span>
+                            </label>
+                            <p class='textbottoggle' id='texttstoggle{{staticval[1]}}'>t.s.On/Off</p>
+                        {% endif %}
+                    </td>
+                    <td>
+
+                        {% if staticval[10] %}
+                            <label class="switch">
+                                <input type="checkbox" class='toggle' id='stopgaintoggle{{staticval[1]}}' checked>
+                                <span class="slider round"></span>
+                            </label>
+                            <p class='textstopgaintoggle' id='textstopgaintoggle{{staticval[1]}}'>익절On/Off</p>
+                        {% else %}
+                            <label class="switch">
+                                <input type="checkbox" class='toggle' id='stopgaintoggle{{staticval[1]}}'>
+                                <span class="slider round"></span>
+                            </label>
+                            <p class='textstopgaintoggle' id='textstopgaintoggle{{staticval[1]}}'>익절On/Off</p>
+                        {% endif %}
+                    </td>
+                    <td>
+
+                        {% if staticval[11] %}
+                            <label class="switch">
+                                <input type="checkbox" class='toggle' id='stoplosstoggle{{staticval[1]}}' checked>
+                                <span class="slider round"></span>
+                            </label>
+                            <p class='textstoplosstoggle' id='textstoplosstoggle{{staticval[1]}}'>손절On/Off</p>
+                        {% else %}
+                            <label class="switch">
+                                <input type="checkbox" class='toggle' id='stoplosstoggle{{staticval[1]}}'>
+                                <span class="slider round"></span>
+                            </label>
+                            <p class='textstoplosstoggle' id='textstoplosstoggle{{staticval[1]}}'>손절On/Off</p>
+                        {% endif %}
+
+                    </td>
+                    <td class="btnBox-1">
+                        <button class="btn-4" href="#" onclick="">
+                            <strong>탈출</strong>
+                        </button>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td colspan="2">
+                        <span class="ti-1">계정</span>
+                        <span class="listName">
+                            <a href="transactionhistory/{{staticval[1]}}">{{staticval[2]}}</a>
+                        </span>
+                    </td>
+                    <td>
+                        <span class="text-3"><p class="entryprice" id="entryprice{{staticval[1]}}"></p></span>
+                    </td>
+                    <td>
+                        <span class="text-3"><p class="actualposition" id="actualposition{{staticval[1]}}"></p></span>
+                    </td>
+                    <td>
+                        <span class="ti-1">S/N</span>
+                        <span class="text-3">사이드넘버</span>
+                    </td>
+                    <td colspan="2">
+                        <span class="text-3"><P class='liveprofitreturn' id='liveprofitreturn{{staticval[1]}}'></P></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="margin">
+                        <span class="text-4">{{staticval[3]}}</span>
+                    </td>
+                    <td class="leverage">
+                        <span class="text-4">{{staticval[4]}}</span>
+                    </td>
+                    <td colspan="2">
+                        <span class="ti-1">총자산</span>
+                        <span class="text-4"><p class="currbalance" id="currbalance{{staticval[1]}}"></p></span>
+                    </td>
+                    <td>
+                        <span class="text-4"><p class="positionamount" id="positionamount{{staticval[1]}}"></p></span>
+                    </td>
+                    <td colspan="2">
+                        <span class="ti-1">가치</span>
+                        <span class="text-4"><p class="positionamountxbt" id="positionamountxbt{{staticval[1]}}"></p></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td colspan="2" style="padding-bottom: 30px;" class="leverage">
+                        <span class="text-4"><p class='marginleverage' id='marginleverage{{staticval[1]}}'></p></span>
+                    </td>
+                    <td style="padding-bottom: 30px;" colspan="2">
+                        <span class="ti-1">스크립트</span>
+                        <span class="text-4">{{staticval[9]}}</span>
+                    </td>
+                    <td style="padding-bottom: 30px;">
+                        <span class="ti-1">버전</span>
+                        <span class="text-4">{{staticval[8]}}<span></span>
+                        </span>
+                    </td>
+                    <td style="padding-bottom: 30px;" colspan="2">
+                        <span class="ti-1">스크립트번호</span>
+                        <span class="text-4">{{staticval[6]}}</span>
+                    </td>
+                </tr>
+
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endfor %}
+</form>
+
+
+{% endblock %}

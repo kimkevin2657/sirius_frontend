@@ -21,6 +21,12 @@ def index():
 def login():
     return render_template('login.html')
 
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    if request.method == 'GET':
+        form = []
+        return render_template('register.html', form=form)
+
 # Check if user logged in
 def is_logged_in(f):
     @wraps(f)
@@ -50,7 +56,7 @@ def dashboard():
         return render_template('dashboard.html', users=users)
         # Close connection
 
-@app.route('/mirror')
+@app.route('/mirror', methods=['GET', 'POST'])
 def mirrorworkspace():
     # Create cursor
     if request.method == 'GET':
@@ -58,19 +64,64 @@ def mirrorworkspace():
         return render_template('mirrorworkspace.html', users=users)
         # Close connection
 
+    if request.method == 'POST':
+        val = ''
+        try:
+            val = request.form['tradingaccount']
+        except Exception as ex:
+            print(ex)
+
+        print(val)
+        if val == 'Trading Account':
+            return redirect(url_for('positionall'))
+
+
 # oracle workspace
-@app.route('/oracle')
+@app.route('/oracle', methods=['GET', 'POST'])
 def oracleworkspace():
     # Create cursor
     if request.method == 'GET':
         users = []
         return render_template('oracleworkspace.html', users=users)
         # Close connection
+    if request.method == 'POST':
+        val = ''
+        try:
+            val = request.form['tradingaccount']
+        except Exception as ex:
+            print(ex)
+        print(val)
+        if val == 'Trading Account':
+            return redirect(url_for('positionall'))
 
 @app.route("/adminlogin")
 def adminlogin():
     if request.method == 'GET':
         return render_template("adminlogin.html")
+
+@app.route("/positionall", methods=['GET', 'POST'])
+def positionall():
+    if request.method == 'GET':
+        staticvals = []
+        totalusers = []
+        return render_template("positionAll.html", staticvals=staticvals, totalusers=totalusers)
+    if request.method == 'POST':
+        val = ''
+        try:
+            val = request.form['transactionhistory']
+        except Exception as ex:
+            print(ex)
+        print(val)
+        if val == 'Transaction History':
+            return redirect(url_for('orderhistory'))
+
+@app.route("/orderhistory", methods=['GET', 'POST'])
+def orderhistory():
+    if request.method == 'GET':
+        grandval = []
+        trades = []
+        return render_template("orderhistory.html", grandval=grandval, trades=trades)
+
 
 
 if __name__ == '__main__':

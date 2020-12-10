@@ -1,0 +1,143 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+{% from "includes/_formhelpers.html" import render_field %}
+<link href="{{ url_for('static', filename='styles/orderhistory.css') }}" rel="stylesheet">
+
+<body>
+
+    <div class="w-container">
+        <h2 style="display: inline-block;" class="historyTitle">Transaction History</h2>
+
+        <table class="head">
+            <tbody>
+                <tr>
+                    <td>Starting Balance</td>
+                    <td>{{grandval[0]}}</td>
+                    <td>Total Profit</td>
+                    <td>{{grandval[1]}}</td>
+                </tr>
+                <tr>
+                    <td>Current Balance</td>
+                    <td>{{grandval[2]}}</td>
+                    <td>Total Return</td>
+                    <td>{{grandval[3]}}</td>
+                </tr>
+            </tbody>
+        </table>
+
+        {% for trade in trades %}
+        <div class="w-container">
+            <div class="tableBox">
+                <table style="padding-bottom: 20px;">
+                    <tbody>
+                        <tr>
+                            <td style="min-width: 80px; width: 131px;" colspan="2"><span class="text-1">{{trade[0]}}</span></td>
+                            <td style="width: 131px;"><span class="time">{{trade[1]}}</span></td>
+                            <td style="width: 131px;">{{trade[11]}}</td>
+                            <td style="width: 131px;">{{trade[10]}}</td>
+                            <td style="width: 131px;">시그널포지션</td>
+                            <td style="width: 131px;">SigNum</td>
+                        </tr>
+    
+                        <tr>
+                            <td colspan="2">
+                                <span>시작</span>
+                            </td>
+                            <td>
+                                <span class="text-2">{{trade[2]}}</span>
+                            </td>
+                            <td>
+                                <span class="text-2">{{trade[4]}}</span>
+                            </td>
+                            <td>
+                                <span>수량</span>
+                            </td>
+                            <td>
+                                <span class="text-2"></span>
+                            </td>
+                            <td>
+                                <span class="text-2">{{trade[7]}}</span>
+                            </td>
+                            <td>
+                                <span class="text-2">수익</span>
+                            </td>
+                            <td>
+                                <span class="text-2">{{trade[12]}}</span>
+                            </td>
+                        </tr>
+    
+                        <tr>
+                            <td colspan="2">
+                                <span>종료</span>
+                            </td>
+                            <td>
+                                <span class="text-3">{{trade[3]}}</span>
+                            </td>
+                            <td>
+                                <span class="text-3">{{trade[5]}}</span>
+                            </td>
+                            <td>
+                                <span>가치</span>
+                            </td>
+                            <td>
+                                <span class="text-3"></span>
+                            </td>
+                            <td>
+                                <span class="text-3">{{trade[8]}}</span>
+                            </td>
+                            <td>
+                                <span class="text-3">수익률</span>
+                            </td>
+                            <td>
+                                <span class="text-3">{{trade[13]}}</span>
+                            </td>
+                        </tr>
+    
+                        <tr>
+                            <td colspan="2">
+                                <span>평균</span>
+                            </td>
+                            <td>
+                                <span class="text-3"></span>
+                            </td>
+                            <td>
+                                <span class="text-3">{{trade[6]}}</span>
+                            </td>
+                            <td>
+                                <span>분할</span>
+                            </td>
+                            <td>
+                                <span class="text-3"></span>
+                            </td>
+                            <td>
+                                <span class="text-3">{{trade[9]}}</span>
+                            </td>
+                            <td>
+                                <span class="text-3">자산</span>
+                            </td>
+                            <td>
+                                <span class="text-3">{{trade[14]}}</span>
+                            </td>
+                        </tr>
+    
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        {% endfor %}
+
+        <div id="page_link" class="pageNumber">
+                <a href="#" onclick="">Previous</a>
+                <a href="#" onclick="">1</a>
+                <a href="#" onclick="">2</a>
+                <a href="#" onclick="">3</a>
+                <a href="#" onclick="">4</a> 
+                <a href="#" onclick="">Next</a>
+        </div>
+    </div>
+
+
+</body>
+
+{% endblock %}

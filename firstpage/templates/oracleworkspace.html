@@ -1,10 +1,14 @@
 {% extends 'layout.html' %}
 
 {% block body %}
-  <h1>Workspace <small> Welcome {{session.username}}</small></h1>
+  <h1>Workspace <small> Welcome {{session.username}}</small>
+    <form action='' method='POST'>
+      <input type='submit' name='tradingaccount' value='Trading Account' class="btn btn-success searchbutton2">
+      </form>
+    </h1>
   <input type='text' class='firstchart' placeholder='search your first chart here' style="width: 230px;" id='firstchart'>
-  <input type='text' class='secondchart' placeholder='search your second chard here' style="width: 230px;" id='secondchart'>
-  <a class="btn btn-success searchbutton">Search</a>
+  <input type='text' class='secondchart' placeholder='search your second chart here' style="width: 230px;" id='secondchart'>
+  <a class="btn btn-success searchbutton" id='chartsearchbutton'>Search</a>
   <hr>
 
   <script src="http://code.jquery.com/jquery.js"></script>
@@ -29,6 +33,10 @@
 .searchbutton{
   margin-left: 10px;
   float:left;
+}
+.searchbutton2{
+  margin-left: 600px;
+  float:right;
 }
 .switch {
     position: relative;
@@ -140,8 +148,19 @@
   </div>
 
   <!-- TradingView Widget BEGIN -->
-
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
   <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
+
+  <script type='text/javascript'>
+    $(document).ready(function(){
+      $(".parentchartdiv").hide();
+    });
+  </script>
+
+
+
+
+  <!--
   <script type="text/javascript">
   new TradingView.widget(
   {
@@ -175,6 +194,50 @@
       "container_id": "tradingview_f6875"
     }
       );
+      </script>
+      -->
+
+      <script type='text/javascript'>
+        $(document).ready(function(){
+          $("#chartsearchbutton").click(function(){
+            var firstsymbol = $("#firstchart").val();
+            var secondsymbol = $("#secondchart").val();
+            console.log(" ================ ");
+            console.log(firstsymbol, '    ', secondsymbol);
+            console.log(" ================ ");
+            var temp = new TradingView.widget(
+                  {
+                  "autosize": true,
+                  "symbol": firstsymbol,
+                  "interval": "D",
+                  "timezone": "Etc/UTC",
+                  "theme": "light",
+                  "style": "1",
+                  "locale": "en",
+                  "toolbar_bg": "#f1f3f6",
+                  "enable_publishing": false,
+                  "allow_symbol_change": false,
+                  "container_id": "tradingview_f6874"
+                }
+            );
+            var temp2 = new TradingView.widget(
+                  {
+                  "autosize": true,
+                  "symbol": secondsymbol,
+                  "interval": "D",
+                  "timezone": "Etc/UTC",
+                  "theme": "light",
+                  "style": "1",
+                  "locale": "en",
+                  "toolbar_bg": "#f1f3f6",
+                  "enable_publishing": false,
+                  "allow_symbol_change": false,
+                  "container_id": "tradingview_f6875"
+                }
+            );
+            $(".parentchartdiv").show();
+          });
+        });
       </script>
 <!-- TradingView Widget END -->
 {% endblock %}
