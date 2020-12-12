@@ -1,0 +1,14 @@
+PE ratio
+PEG ratio               pegRatio
+future PE ratio             forwardPE
+future PEG ratio 
+Beta                        beta
+ATR
+
+historical spread volatility for 
+daily
+weekly
+monthly
+yearly
+5 years
+10 years
