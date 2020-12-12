@@ -76,8 +76,6 @@ $(document).ready(function(){
         data: postdata,
         headers: {"Content-Type": "application/json"}
       }).then((data) => {
-
-        console.log(" first rawdata   ", data.data);
         var firstdata = [];
         var firstdataopen = [];
         var firstdatahigh = [];
@@ -103,7 +101,7 @@ $(document).ready(function(){
     
     
         const postdata2 = {};
-        postdata2["stock"] = secondsymbol;
+        postdata2["stock"] = 'fb';
         postdata2['period'] = 'max';
         postdata2['interval'] = '1d';
 
@@ -115,8 +113,6 @@ $(document).ready(function(){
             data: postdata2,
             headers: {"Content-Type": "application/json"}
           }).then((data2) => {
-
-            console.log(" second rawdata   ", data2.data);
     
             var seconddata = [];
             var seconddataopen = [];
@@ -164,14 +160,14 @@ $(document).ready(function(){
 
             var chartdata = [];
             for (var i = 0; i < spreaddate.length; i++){
-              chartdata.push([spreaddate[i]*1000, spreadclose[i]]);
+              chartdata.push([spreaddate[i]*1000, spreadopen[i], spreadhigh[i], spreadlow[i], spreadclose[i]]);
               // spreadopen[i], spreadhigh[i], spreadlow[i], 
             }
 
             console.log("chart data   ", chartdata);
 
 
-            /*
+            
             Highcharts.stockChart('tradingview_f6876', {
                 navigation: {
                     bindings: {
@@ -219,10 +215,9 @@ $(document).ready(function(){
                     yAxis: 1
                 }
                 */
-                /*
+                
                 ]
             });
-            */
       
       
         
@@ -235,7 +230,7 @@ $(document).ready(function(){
 
 
 
-            
+            /*
             Highcharts.chart('tradingview_f6876', {
                 chart: {
                     zoomType: 'x'
@@ -284,7 +279,7 @@ $(document).ready(function(){
                     data: chartdata
                 }]
             });
-            
+            */
 
 
 

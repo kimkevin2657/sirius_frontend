@@ -6,31 +6,28 @@
 //  <script src="https://unpkg.com/lightweight-charts/dist/lightweight-charts.standalone.production.js"></script>
 
 $(document).ready(function(){
-    $("#chartsearchbutton").click(function(){
-      var firstsymbol = $("#firstchart").val();
-      var secondsymbol = $("#secondchart").val();
-      console.log(" ================ ");
-      console.log(firstsymbol, '    ', secondsymbol);
-      console.log(" ================ ");
-      var temp = new TradingView.widget(
+
+
+    new TradingView.widget(
+        {
+        "autosize": true,
+        "symbol": "AAPL",
+        "interval": "D",
+        "timezone": "Etc/UTC",
+        "theme": "light",
+        "style": "1",
+        "locale": "en",
+        "toolbar_bg": "#f1f3f6",
+        "enable_publishing": false,
+        "allow_symbol_change": false,
+        "container_id": "tradingview_f6874"
+      }
+        );
+
+            new TradingView.widget(
             {
             "autosize": true,
-            "symbol": firstsymbol,
-            "interval": "D",
-            "timezone": "Etc/UTC",
-            "theme": "light",
-            "style": "1",
-            "locale": "en",
-            "toolbar_bg": "#f1f3f6",
-            "enable_publishing": false,
-            "allow_symbol_change": false,
-            "container_id": "tradingview_f6874"
-          }
-      );
-      var temp2 = new TradingView.widget(
-            {
-            "autosize": true,
-            "symbol": secondsymbol,
+            "symbol": "FB",
             "interval": "D",
             "timezone": "Etc/UTC",
             "theme": "light",
@@ -41,7 +38,7 @@ $(document).ready(function(){
             "allow_symbol_change": false,
             "container_id": "tradingview_f6875"
           }
-      );
+        );
 
 
       const chartProperties = {
@@ -66,7 +63,7 @@ $(document).ready(function(){
       */
 
       const postdata = {};
-      postdata["stock"] = firstsymbol;
+      postdata["stock"] = 'AAPL';
       postdata['period'] = 'max';
       postdata['interval'] = '1d';
       console.log(" post data   ", postdata);
@@ -76,8 +73,6 @@ $(document).ready(function(){
         data: postdata,
         headers: {"Content-Type": "application/json"}
       }).then((data) => {
-
-        console.log(" first rawdata   ", data.data);
         var firstdata = [];
         var firstdataopen = [];
         var firstdatahigh = [];
@@ -103,7 +98,7 @@ $(document).ready(function(){
     
     
         const postdata2 = {};
-        postdata2["stock"] = secondsymbol;
+        postdata2["stock"] = 'FB';
         postdata2['period'] = 'max';
         postdata2['interval'] = '1d';
 
@@ -115,8 +110,6 @@ $(document).ready(function(){
             data: postdata2,
             headers: {"Content-Type": "application/json"}
           }).then((data2) => {
-
-            console.log(" second rawdata   ", data2.data);
     
             var seconddata = [];
             var seconddataopen = [];
@@ -366,7 +359,12 @@ $(document).ready(function(){
     */
     
 
-
-      $(".parentchartdiv").show();
     });
-  });
+
+
+
+
+
+
+
+
