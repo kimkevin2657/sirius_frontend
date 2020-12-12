@@ -63,8 +63,17 @@ def historical():
 @app.route("/info", methods=['GET', 'POST'])
 def companyinfo():
     if request.method == 'POST':
-        data = json.loads(request.data)
-        stock = str(data['stock'])
+        stock = ''
+        try:
+            stock = str(json.loads(request.data)["stock"])
+        except Exception as ex:
+            print(ex)
+
+        try:
+            stock = str(request.form["stock"])
+        except Exception as ex:
+            print(ex)
+
         obj = ''
         try:
             obj = Ticker(stock)

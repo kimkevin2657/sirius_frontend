@@ -65,6 +65,7 @@ def mirrorworkspace():
 
         inputstock1 = {"stock": "AAPL"}
         inputstock2 = {"stock": "FB"}
+        print(inputstock1, '    ', inputstock2)
         val1 = requests.post("http://127.0.0.1:5050/info", data=inputstock1)
         print()
         print(val1)

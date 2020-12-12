@@ -287,27 +287,68 @@ $(document).ready(function(){
             
 
 
+            const postdata3 = {};
+            postdata3["stock"] = firstsymbol;
+    
+            console.log(" third post data    ", postdata3);
+        
+            axios({
+                method: 'post',
+                url: 'http://127.0.0.1:5050/info',
+                data: postdata3,
+                headers: {"Content-Type": "application/json"}
+              }).then((data3) => {
+    
+                console.log(" second rawdata   ", data3.data);
+
+                var firststockfundamental = data3.data;
+
+                $("#firststockPEratio").text(firstsymbol.toUpperCase() + "  " + "PE ratio");
+                $("#firststockPEratioval").text(firststockfundamental.PEratio);
+                $("#firststockPEGratio").text(firstsymbol.toUpperCase() + "  " + "PEG ratio");
+                $("#firststockPEGratioval").text(firststockfundamental.PEGratio);
+                $("#firststockfuturePEratio").text(firstsymbol.toUpperCase() + "  " + "future PE ratio");
+                $("#firststockfuturePEratioval").text(firststockfundamental.futurePEratio);
+                $("#firststockfuturePEGratio").text(firstsymbol.toUpperCase() + "  " + "future PEG ratio");
+                $("#firststockfuturePEGratioval").text(firststockfundamental.futurePEGratio);
+                $("#firststockbeta").text(firstsymbol.toUpperCase() + "  " + "beta");
+                $("#firststockbetaval").text(firststockfundamental.beta);
+
+                const postdata4 = {};
+                postdata4["stock"] = secondsymbol;
+
+                console.log(" fourth post data   ", postdata4);
 
 
+                axios({
+                  method: 'post',
+                  url: 'http://127.0.0.1:5050/info',
+                  data: postdata4,
+                  headers: {"Content-Type": "application/json"}
+                }).then((data4) => {
+      
+                  console.log(" second rawdata   ", data4.data);
+  
+                  var secondstockfundamental = data4.data;
+  
+                  $("#secondstockPEratio").text(secondsymbol.toUpperCase() + "  " + "PE ratio");
+                  $("#secondstockPEratioval").text(secondstockfundamental.PEratio);
+                  $("#secondstockPEGratio").text(secondsymbol.toUpperCase() + "  " + "PEG ratio");
+                  $("#secondstockPEGratioval").text(secondstockfundamental.PEGratio);
+                  $("#secondstockfuturePEratio").text(secondsymbol.toUpperCase() + "  " + "future PE ratio");
+                  $("#secondstockfuturePEratioval").text(secondstockfundamental.futurePEratio);
+                  $("#secondstockfuturePEGratio").text(secondsymbol.toUpperCase() + "  " + "future PEG ratio");
+                  $("#secondstockfuturePEGratioval").text(secondstockfundamental.futurePEGratio);
+                  $("#secondstockbeta").text(secondsymbol.toUpperCase() + "  " + "beta");
+                  $("#secondstockbetaval").text(secondstockfundamental.beta);
 
+                }).catch((err) => {
+                  console.log(err);
+                })
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+              }).catch((err) => {
+                console.log(err);
+              })
 
 
             /*
