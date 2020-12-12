@@ -1,0 +1,24 @@
+{
+  "name": "firstpage",
+  "version": "1.0.0",
+  "description": "",
+  "main": "finnhubsocket.js",
+  "dependencies": {
+    "axios": "^0.21.0",
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1",
+    "fs": "^0.0.1-security",
+    "http": "^0.0.1-security",
+    "lightweight-charts": "^3.2.0",
+    "socket-io": "^1.0.0",
+    "socket.io": "^3.0.4",
+    "socket.io-client": "^3.0.4",
+    "ws": "^7.4.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}
