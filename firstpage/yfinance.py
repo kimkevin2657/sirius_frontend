@@ -15,10 +15,11 @@ from flask import jsonify
 import random
 from datetime import timezone
 import datetime
-
+# pip install lxml
 
 app = Flask(__name__)
 CORS(app)
+
 
 @app.route('/historical', methods=['GET', 'POST'])
 def historical():
@@ -56,6 +57,41 @@ def historical():
             dt = datetime.datetime(int(year), int(month), int(day))
             timestamp = int(dt.replace(tzinfo=timezone.utc).timestamp())
             data['date'][i] = timestamp
+
+        return jsonify(data)
+
+@app.route("/info", methods=['GET', 'POST'])
+def companyinfo():
+    if request.method == 'POST':
+        data = json.loads(request.data)
+        stock = str(data['stock'])
+        obj = ''
+        try:
+            obj = Ticker(stock)
+        except Exception as ex:
+            print(ex)
+
+        val = ''
+        try:
+            val = obj.info
+        except Exception as ex:
+            print(ex)
+
+        data = dict()
+        try:
+            data["PEGratio"] = val["pegRatio"]
+            data["futurePEGratio"] = val["pegRatio"]
+        except Exception as ex:
+            print(ex)
+        try:
+            data["futurePEratio"] = val["forwardPE"]
+            data["PEratio"] = val["forwardPE"]
+        except Exception as ex:
+            print(ex)
+        try:
+            data["beta"] = val["beta"]
+        except Exception as ex:
+            print(ex)
 
         return jsonify(data)
 

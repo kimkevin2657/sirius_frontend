@@ -10,6 +10,7 @@
 
   <script src="http://code.jquery.com/jquery.js"></script>
   <script src="{{ url_for('static', filename='styles/dashboard.js') }}"></script>
+  <link href="{{ url_for('static', filename='styles/position.css') }}" rel="stylesheet">
 
 
   <head>
@@ -143,7 +144,39 @@
     <div class='chart' id="tradingview_f6874"></div>
     <div class='chart' id="tradingview_f6875"></div>
     <div class='chart' id="tradingview_f6876"></div>
+    <table class="head">
+      <tr>
+          <td>{{firststock.stock}}  PE Ratio</td>
+          <td>{{firststock.PEratio}}</td>
+          <td>{{firststock.stock}}  PEG Ratio</td>
+          <td>{{firststock.PEGratio}}</td>
+          <td>{{firststock.stock}}  future PE Ratio</td>
+          <td>{{firststock.futurePEratio}}</td>
+          <td>{{firststock.stock}}  future PEG Ratio</td>
+          <td>{{firststock.futurePEGratio}}</td>
+          <td>{{firststock.stock}}  beta</td>
+          <td>{{firststock.beta}}</td>
+      </tr>
+      <tr>
+        <td>{{secondstock.stock}}  PE Ratio</td>
+        <td>{{secondstock.PEratio}}</td>
+        <td>{{secondstock.stock}}  PEG Ratio</td>
+        <td>{{secondstock.PEGratio}}</td>
+        <td>{{secondstock.stock}}  future PE Ratio</td>
+        <td>{{secondstock.futurePEratio}}</td>
+        <td>{{secondstock.stock}}  future PEG Ratio</td>
+        <td>{{secondstock.futurePEGratio}}</td>
+        <td>{{secondstock.stock}}  beta</td>
+        <td>{{secondstock.beta}}</td>
+    </tr>
+    </table>
+
+
+
+
   </div>
+
+
 
   <!-- TradingView Widget BEGIN -->
   <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>

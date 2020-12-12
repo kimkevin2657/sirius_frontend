@@ -9,6 +9,7 @@ import time
 import numpy as np
 from flask import jsonify
 import random
+import requests
 
 app = Flask(__name__)
 
@@ -61,7 +62,39 @@ def mirrorworkspace():
     # Create cursor
     if request.method == 'GET':
         users = []
-        return render_template('mirrorworkspace.html', users=users)
+
+        inputstock1 = {"stock": "AAPL"}
+        inputstock2 = {"stock": "FB"}
+        val1 = requests.post("http://127.0.0.1:5050/info", data=inputstock1)
+        print()
+        print(val1)
+        print(type(val1))
+        print()
+        print(type(val1.json()))
+        print()
+        val2 = requests.post("http://127.0.0.1:5050/info", data=inputstock2)
+        print()
+        print(val2)
+        print(type(val2))
+        print()
+        print(type(val2.json()))
+        print()
+        firststock = dict()
+        secondstock = dict()
+        firststock["stock"] = "AAPL"
+        firststock["PEGratio"] = val1.json()["PEGratio"]
+        firststock["futurePEGratio"] = val1.json()["futurePEGratio"]
+        firststock["futurePEratio"] = val1.json()["futurePEratio"]
+        firststock["PEratio"] = val1.json()["PEratio"]
+        firststock["beta"] = val1.json()["beta"]
+        secondstock["stock"] = "FB"
+        secondstock["PEGratio"] = val2.json()["PEGratio"]
+        secondstock["futurePEGratio"] = val2.json()["futurePEGratio"]
+        secondstock["futurePEratio"] = val2.json()["futurePEratio"]
+        secondstock["PEratio"] = val2.json()["PEratio"]
+        secondstock["beta"] = val2.json()["beta"]
+
+        return render_template('mirrorworkspace.html', users=users, firststock=firststock, secondstock=secondstock)
         # Close connection
 
     if request.method == 'POST':
