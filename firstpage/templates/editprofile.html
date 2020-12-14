@@ -1,0 +1,28 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+  <h1>Edit Profile</h1>
+  <form action="" method="POST">
+    <div class="form-group">
+      <label>Name</label>
+      <input type="text" name="name" class="form-control" value="{{user.name}}">
+    </div>
+    <div class="form-group">
+      <label>Username</label>
+      <input type="text" name="username" class="form-control" value="{{user.username}}">
+    </div>
+    <div class="form-group">
+      <label>Email</label>
+      <input type="text" name="email" class="form-control" value="{{user.email}}"}>
+    </div>
+    <div class="form-group">
+      <label>IG Apikey</label>
+      <input type="text" name="apikey" class="form-control" value="{{user.apikey}}">
+    </div>
+    <div class="form-group">
+      <label>IG Secret Key</label>
+      <input type="text" name="secret" class="form-control" value="{{user.secret}}">
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+  </form>
+{% endblock %}

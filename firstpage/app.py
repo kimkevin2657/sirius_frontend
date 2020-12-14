@@ -217,6 +217,34 @@ def dashboard():
         return render_template('dashboard.html', users=users)
         # Close connection
 
+@app.route("/editprofile", methods=['GET', 'POST'])
+@is_logged_in
+def editprofile():
+    if request.method == "GET":
+        cur = conn.cursor()
+        ids = int(session['ids'])
+        cur.execute("SELECT name, username, email, apikey, secret FROM userinfo WHERE id = %s", (ids,))
+        userinfo = cur.fetchall()[0]
+        user = dict()
+        user['name'] = userinfo[0]
+        user['username'] = userinfo[1]
+        user['email'] = userinfo[2]
+        user['apikey'] = userinfo[3]
+        user['secret'] = userinfo[4]
+        return render_template("editprofile.html", user=user)
+    if request.method == "POST":
+        name = request.form['name']
+        username = request.form['username']
+        email = request.form['email']
+        apikey = request.form['apikey']
+        secret = request.form['secret']
+        ids = int(session['ids'])
+        cur = conn.cursor()
+        cur.execute("UPDATE userinfo SET (name, username, email, apikey, secret) = (%s, %s, %s, %s, %s) WHERE id = %s", (name, username, email, apikey, secret, ids))
+        conn.commit()
+        cur.close()
+        return redirect(url_for("editprofile"))
+
 @app.route('/mirror', methods=['GET', 'POST'])
 @is_mirror
 def mirrorworkspace():
