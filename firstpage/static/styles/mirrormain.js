@@ -78,15 +78,17 @@ $(document).ready(function(){
         var firstdatahigh = [];
         var firstdatalow = [];
         var firstdataclose = [];
-        for (var i = data.data.date.length; i > 0; i--){
+        for (var i = data.data.date.length-1; i >= 0; i--){
             firstdata.push(data.data.date[i]);
             firstdataopen.push(data.data.open[i]);
             firstdatahigh.push(data.data.high[i]);
             firstdatalow.push(data.data.low[i]);
             firstdataclose.push(data.data.close[i]);
-            if (firstdata.length >= 365){
+            
+            if (firstdata.length >= 3650){
                 break;
             }
+            
         }
         firstdata.reverse();
         firstdataopen.reverse();
@@ -116,15 +118,17 @@ $(document).ready(function(){
             var seconddatahigh = [];
             var seconddatalow = [];
             var seconddataclose = [];
-            for (var i = data2.data.date.length; i > 0; i--){
+            for (var i = data2.data.date.length-1; i >= 0; i--){
                 seconddata.push(data2.data.date[i]);
                 seconddataopen.push(data2.data.open[i]);
                 seconddatahigh.push(data2.data.high[i]);
                 seconddatalow.push(data2.data.low[i]);
                 seconddataclose.push(data2.data.close[i]);
-                if (seconddata.length >= 365){
+                
+                if (seconddata.length >= 3650){
                     break;
                 }
+                
             }
             seconddata.reverse();
             seconddataopen.reverse();
@@ -162,6 +166,16 @@ $(document).ready(function(){
             }
 
             console.log("chart data   ", chartdata);
+
+            var chartdata2 = [];
+            for (var i = chartdata.length-1; i > 0; i--){
+                chartdata2.push(chartdata[i]);
+                if (chartdata2.length >= 365){
+                    break;
+                }
+            }
+            chartdata2.reverse();
+
 
 
             /*
@@ -274,7 +288,7 @@ $(document).ready(function(){
                 series: [{
                     type: 'area',
                     name: 'Spread',
-                    data: chartdata
+                    data: chartdata2
                 }]
             });
             
@@ -282,15 +296,103 @@ $(document).ready(function(){
 
 
 
+            function getStandardDeviation (array) {
+                const n = array.length
+                const mean = array.reduce((a, b) => a + b) / n
+                return Math.sqrt(array.map(x => Math.pow(x - mean, 2)).reduce((a, b) => a + b) / n)
+              }
 
 
+            //Daily, Weekly, Monthly, Yearly, 5y, 10y
+            var dailyvol = 0.0;
+            var weeklyvol = 0.0;
+            var monthlyvol = 0.0;
+            var yearlyvol = 0.0;
+            var fivevol = 0.0;
+            var tenvol = 0.0;
 
+            console.log('vols  ', dailyvol, '  ', weeklyvol, '   ', monthlyvol, '   ', yearlyvol, '   ', fivevol, '   ', tenvol);
 
+            var indexlist = [];
+            var chartdataval = [];
+            for (var i = chartdata.length-1; i >= 0; i--){
+            chartdataval.push(chartdata[i][1]);
+            }
+            
+            try {
+            dailyvol = getStandardDeviation(chartdataval).toFixed(6);
+            }catch(err){
+            console.log(err);
+            }
 
+            console.log('vols  ', dailyvol, '  ', weeklyvol, '   ', monthlyvol, '   ', yearlyvol, '   ', fivevol, '   ', tenvol);
 
+            try {
+            indexlist = chartdataval.filter(function(value, index, Arr) {
+                return index % (5) == 0;
+            });
+            weeklyvol = getStandardDeviation(indexlist).toFixed(6);
+            }catch(err){
+            console.log(err);
+            };
 
+            console.log('vols  ', dailyvol, '  ', weeklyvol, '   ', monthlyvol, '   ', yearlyvol, '   ', fivevol, '   ', tenvol);
 
+            indexlist = [];
+            try {
+            indexlist = chartdataval.filter(function(value, index, Arr) {
+                return index % (21) == 0;
+            });
+            monthlyvol = getStandardDeviation(indexlist).toFixed(6);
+            }catch(err){
+            console.log(err);
+            };
 
+            console.log('vols  ', dailyvol, '  ', weeklyvol, '   ', monthlyvol, '   ', yearlyvol, '   ', fivevol, '   ', tenvol);
+            
+
+            indexlist = [];
+            try {
+            indexlist = chartdataval.filter(function(value, index, Arr) {
+                return index % (252) == 0;
+            });
+            yearlyvol = getStandardDeviation(indexlist).toFixed(6);
+            }catch(err){
+            console.log(err);
+            };
+            
+            console.log('vols  ', dailyvol, '  ', weeklyvol, '   ', monthlyvol, '   ', yearlyvol, '   ', fivevol, '   ', tenvol);
+        
+            indexlist = [];
+            try {
+            indexlist = chartdataval.filter(function(value, index, Arr) {
+                return index % (252*5) == 0;
+            });
+            fivevol = getStandardDeviation(indexlist).toFixed(6);
+            }catch(err){
+            console.log(err);
+            };
+            
+            console.log('vols  ', dailyvol, '  ', weeklyvol, '   ', monthlyvol, '   ', yearlyvol, '   ', fivevol, '   ', tenvol);
+
+            indexlist = [];
+            try {
+            indexlist = chartdataval.filter(function(value, index, Arr) {
+                return index % (252*10) == 0;
+            });
+            tenvol = getStandardDeviation(indexlist).toFixed(6);
+            }catch(err){
+            console.log(err);
+            };
+
+            console.log('vols  ', dailyvol, '  ', weeklyvol, '   ', monthlyvol, '   ', yearlyvol, '   ', fivevol, '   ', tenvol);
+
+            $("#spreaddaily").text(dailyvol);
+            $("#spreadweekly").text(weeklyvol);
+            $("#spreadmonthly").text(monthlyvol);
+            $("#spreadyearly").text(yearlyvol);
+            $("#spread5yrs").text(fivevol);
+            $("#spread10yrs").text(tenvol);
 
 
 

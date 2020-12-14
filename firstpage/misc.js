@@ -2,6 +2,18 @@
 const axios = require("axios");
 
 
+function getStandardDeviation (array) {
+  const n = array.length
+  const mean = array.reduce((a, b) => a + b) / n
+  return Math.sqrt(array.map(x => Math.pow(x - mean, 2)).reduce((a, b) => a + b) / n)
+}
+
+var listval = [];
+var val = 0.0;
+val = getStandardDeviation(listval);
+console.log(val);
+
+
 /*
 axios.post('http://127.0.0.1:5050/historical', postdata).then((data) => {
   console.log(data);
@@ -10,6 +22,7 @@ axios.post('http://127.0.0.1:5050/historical', postdata).then((data) => {
   });
 */
 
+/*
 const postdata = {};
 postdata["stock"] = 'aapl';
 postdata['period'] = 'max';
@@ -107,6 +120,7 @@ axios({
   }).catch((err) => {
       console.log(err);
   })
+  */
 
 /*
 axios.get("http://127.0.0.1:5050/historicaltest").then((data) => {
