@@ -7,27 +7,38 @@
 
 $(document).ready(function(){
 
+    var firststock = $("#tradingview_f6874").attr("name");
+    var secondstock = $("#tradingview_f6875").attr("name");
+
+    console.log(" first stock  ", firststock, "  second stock " ,secondstock);
+    if (firststock == '' || firststock == undefined){
+        firststock = "AAPL"
+    }
+    if (secondstock == '' || secondstock == undefined){
+        secondstock = "FB"
+    }
+    
 
     new TradingView.widget(
         {
-        "autosize": true,
-        "symbol": "AAPL",
-        "interval": "D",
-        "timezone": "Etc/UTC",
-        "theme": "light",
-        "style": "1",
-        "locale": "en",
-        "toolbar_bg": "#f1f3f6",
-        "enable_publishing": false,
-        "allow_symbol_change": false,
-        "container_id": "tradingview_f6874"
-      }
-        );
-
-            new TradingView.widget(
-            {
             "autosize": true,
-            "symbol": "FB",
+            "symbol": firststock,
+            "interval": "D",
+            "timezone": "Etc/UTC",
+            "theme": "light",
+            "style": "1",
+            "locale": "en",
+            "toolbar_bg": "#f1f3f6",
+            "enable_publishing": false,
+            "allow_symbol_change": false,
+            "container_id": "tradingview_f6874"
+      }
+    );
+
+    new TradingView.widget(
+        {
+            "autosize": true,
+            "symbol": secondstock,
             "interval": "D",
             "timezone": "Etc/UTC",
             "theme": "light",
@@ -37,8 +48,8 @@ $(document).ready(function(){
             "enable_publishing": false,
             "allow_symbol_change": false,
             "container_id": "tradingview_f6875"
-          }
-        );
+        }
+    );
 
 
       const chartProperties = {
@@ -63,7 +74,7 @@ $(document).ready(function(){
       */
 
       const postdata = {};
-      postdata["stock"] = 'AAPL';
+      postdata["stock"] = firststock;
       postdata['period'] = 'max';
       postdata['interval'] = '1d';
       console.log(" post data   ", postdata);
@@ -100,7 +111,7 @@ $(document).ready(function(){
     
     
         const postdata2 = {};
-        postdata2["stock"] = 'FB';
+        postdata2["stock"] = secondstock;
         postdata2['period'] = 'max';
         postdata2['interval'] = '1d';
 
@@ -111,7 +122,7 @@ $(document).ready(function(){
             url: 'http://127.0.0.1:5050/historical',
             data: postdata2,
             headers: {"Content-Type": "application/json"}
-          }).then((data2) => {
+        }).then((data2) => {
     
             var seconddata = [];
             var seconddataopen = [];
@@ -293,108 +304,168 @@ $(document).ready(function(){
             });
             
 
-
-
-
-            function getStandardDeviation (array) {
-                const n = array.length
-                const mean = array.reduce((a, b) => a + b) / n
-                return Math.sqrt(array.map(x => Math.pow(x - mean, 2)).reduce((a, b) => a + b) / n)
-              }
-
-
-            //Daily, Weekly, Monthly, Yearly, 5y, 10y
-            var dailyvol = 0.0;
-            var weeklyvol = 0.0;
-            var monthlyvol = 0.0;
-            var yearlyvol = 0.0;
-            var fivevol = 0.0;
-            var tenvol = 0.0;
-
-            console.log('vols  ', dailyvol, '  ', weeklyvol, '   ', monthlyvol, '   ', yearlyvol, '   ', fivevol, '   ', tenvol);
-
-            var indexlist = [];
-            var chartdataval = [];
-            for (var i = chartdata.length-1; i >= 0; i--){
-            chartdataval.push(chartdata[i][1]);
-            }
-            
-            try {
-            dailyvol = getStandardDeviation(chartdataval).toFixed(6);
-            }catch(err){
-            console.log(err);
-            }
-
-            console.log('vols  ', dailyvol, '  ', weeklyvol, '   ', monthlyvol, '   ', yearlyvol, '   ', fivevol, '   ', tenvol);
-
-            try {
-            indexlist = chartdataval.filter(function(value, index, Arr) {
-                return index % (5) == 0;
-            });
-            weeklyvol = getStandardDeviation(indexlist).toFixed(6);
-            }catch(err){
-            console.log(err);
-            };
-
-            console.log('vols  ', dailyvol, '  ', weeklyvol, '   ', monthlyvol, '   ', yearlyvol, '   ', fivevol, '   ', tenvol);
-
-            indexlist = [];
-            try {
-            indexlist = chartdataval.filter(function(value, index, Arr) {
-                return index % (21) == 0;
-            });
-            monthlyvol = getStandardDeviation(indexlist).toFixed(6);
-            }catch(err){
-            console.log(err);
-            };
-
-            console.log('vols  ', dailyvol, '  ', weeklyvol, '   ', monthlyvol, '   ', yearlyvol, '   ', fivevol, '   ', tenvol);
-            
-
-            indexlist = [];
-            try {
-            indexlist = chartdataval.filter(function(value, index, Arr) {
-                return index % (252) == 0;
-            });
-            yearlyvol = getStandardDeviation(indexlist).toFixed(6);
-            }catch(err){
-            console.log(err);
-            };
-            
-            console.log('vols  ', dailyvol, '  ', weeklyvol, '   ', monthlyvol, '   ', yearlyvol, '   ', fivevol, '   ', tenvol);
+            const postdata3 = {};
+            postdata3["stock"] = firststock;
+    
+            console.log(" third post data    ", postdata3);
         
-            indexlist = [];
-            try {
-            indexlist = chartdataval.filter(function(value, index, Arr) {
-                return index % (252*5) == 0;
-            });
-            fivevol = getStandardDeviation(indexlist).toFixed(6);
-            }catch(err){
-            console.log(err);
-            };
-            
-            console.log('vols  ', dailyvol, '  ', weeklyvol, '   ', monthlyvol, '   ', yearlyvol, '   ', fivevol, '   ', tenvol);
+            axios({
+                method: 'post',
+                url: 'http://127.0.0.1:5050/info',
+                data: postdata3,
+                headers: {"Content-Type": "application/json"}
+            }).then((data3) => {
+    
+                console.log(" second rawdata   ", data3.data);
 
-            indexlist = [];
-            try {
-            indexlist = chartdataval.filter(function(value, index, Arr) {
-                return index % (252*10) == 0;
-            });
-            tenvol = getStandardDeviation(indexlist).toFixed(6);
-            }catch(err){
-            console.log(err);
-            };
+                var firststockfundamental = data3.data;
 
-            console.log('vols  ', dailyvol, '  ', weeklyvol, '   ', monthlyvol, '   ', yearlyvol, '   ', fivevol, '   ', tenvol);
+                $("#firststockPEratio").text(firststock.toUpperCase() + "  " + "PE ratio");
+                $("#firststockPEratioval").text(firststockfundamental.PEratio);
+                $("#firststockPEGratio").text(firststock.toUpperCase() + "  " + "PEG ratio");
+                $("#firststockPEGratioval").text(firststockfundamental.PEGratio);
+                $("#firststockfuturePEratio").text(firststock.toUpperCase() + "  " + "future PE ratio");
+                $("#firststockfuturePEratioval").text(firststockfundamental.futurePEratio);
+                $("#firststockfuturePEGratio").text(firststock.toUpperCase() + "  " + "future PEG ratio");
+                $("#firststockfuturePEGratioval").text(firststockfundamental.futurePEGratio);
+                $("#firststockbeta").text(firststock.toUpperCase() + "  " + "beta");
+                $("#firststockbetaval").text(firststockfundamental.beta);
 
-            $("#spreaddaily").text(dailyvol);
-            $("#spreadweekly").text(weeklyvol);
-            $("#spreadmonthly").text(monthlyvol);
-            $("#spreadyearly").text(yearlyvol);
-            $("#spread5yrs").text(fivevol);
-            $("#spread10yrs").text(tenvol);
+                const postdata4 = {};
+                postdata4["stock"] = secondstock;
+
+                console.log(" fourth post data   ", postdata4);
 
 
+                axios({
+                  method: 'post',
+                  url: 'http://127.0.0.1:5050/info',
+                  data: postdata4,
+                  headers: {"Content-Type": "application/json"}
+                }).then((data4) => {
+      
+                    console.log(" second rawdata   ", data4.data);
+
+                    var secondstockfundamental = data4.data;
+
+                    $("#secondstockPEratio").text(secondstock.toUpperCase() + "  " + "PE ratio");
+                    $("#secondstockPEratioval").text(secondstockfundamental.PEratio);
+                    $("#secondstockPEGratio").text(secondstock.toUpperCase() + "  " + "PEG ratio");
+                    $("#secondstockPEGratioval").text(secondstockfundamental.PEGratio);
+                    $("#secondstockfuturePEratio").text(secondstock.toUpperCase() + "  " + "future PE ratio");
+                    $("#secondstockfuturePEratioval").text(secondstockfundamental.futurePEratio);
+                    $("#secondstockfuturePEGratio").text(secondstock.toUpperCase() + "  " + "future PEG ratio");
+                    $("#secondstockfuturePEGratioval").text(secondstockfundamental.futurePEGratio);
+                    $("#secondstockbeta").text(secondstock.toUpperCase() + "  " + "beta");
+                    $("#secondstockbetaval").text(secondstockfundamental.beta);
+
+
+                    function getStandardDeviation (array) {
+                        const n = array.length
+                        const mean = array.reduce((a, b) => a + b) / n
+                        return Math.sqrt(array.map(x => Math.pow(x - mean, 2)).reduce((a, b) => a + b) / n)
+                    }
+
+
+                    //Daily, Weekly, Monthly, Yearly, 5y, 10y
+                    var dailyvol = 0.0;
+                    var weeklyvol = 0.0;
+                    var monthlyvol = 0.0;
+                    var yearlyvol = 0.0;
+                    var fivevol = 0.0;
+                    var tenvol = 0.0;
+
+                    console.log('vols  ', dailyvol, '  ', weeklyvol, '   ', monthlyvol, '   ', yearlyvol, '   ', fivevol, '   ', tenvol);
+
+                    var indexlist = [];
+                    var chartdataval = [];
+                    for (var i = chartdata.length-1; i >= 0; i--){
+                    chartdataval.push(chartdata[i][1]);
+                    }
+                    
+                    try {
+                    dailyvol = getStandardDeviation(chartdataval).toFixed(6);
+                    }catch(err){
+                    console.log(err);
+                    }
+
+                    console.log('vols  ', dailyvol, '  ', weeklyvol, '   ', monthlyvol, '   ', yearlyvol, '   ', fivevol, '   ', tenvol);
+
+                    try {
+                    indexlist = chartdataval.filter(function(value, index, Arr) {
+                        return index % (5) == 0;
+                    });
+                    weeklyvol = getStandardDeviation(indexlist).toFixed(6);
+                    }catch(err){
+                    console.log(err);
+                    };
+
+                    console.log('vols  ', dailyvol, '  ', weeklyvol, '   ', monthlyvol, '   ', yearlyvol, '   ', fivevol, '   ', tenvol);
+
+                    indexlist = [];
+                    try {
+                    indexlist = chartdataval.filter(function(value, index, Arr) {
+                        return index % (21) == 0;
+                    });
+                    monthlyvol = getStandardDeviation(indexlist).toFixed(6);
+                    }catch(err){
+                    console.log(err);
+                    };
+
+                    console.log('vols  ', dailyvol, '  ', weeklyvol, '   ', monthlyvol, '   ', yearlyvol, '   ', fivevol, '   ', tenvol);
+                    
+
+                    indexlist = [];
+                    try {
+                    indexlist = chartdataval.filter(function(value, index, Arr) {
+                        return index % (252) == 0;
+                    });
+                    yearlyvol = getStandardDeviation(indexlist).toFixed(6);
+                    }catch(err){
+                    console.log(err);
+                    };
+                    
+                    console.log('vols  ', dailyvol, '  ', weeklyvol, '   ', monthlyvol, '   ', yearlyvol, '   ', fivevol, '   ', tenvol);
+                
+                    indexlist = [];
+                    try {
+                    indexlist = chartdataval.filter(function(value, index, Arr) {
+                        return index % (252*5) == 0;
+                    });
+                    fivevol = getStandardDeviation(indexlist).toFixed(6);
+                    }catch(err){
+                    console.log(err);
+                    };
+                    
+                    console.log('vols  ', dailyvol, '  ', weeklyvol, '   ', monthlyvol, '   ', yearlyvol, '   ', fivevol, '   ', tenvol);
+
+                    indexlist = [];
+                    try {
+                    indexlist = chartdataval.filter(function(value, index, Arr) {
+                        return index % (252*10) == 0;
+                    });
+                    tenvol = getStandardDeviation(indexlist).toFixed(6);
+                    }catch(err){
+                    console.log(err);
+                    };
+
+                    console.log('vols  ', dailyvol, '  ', weeklyvol, '   ', monthlyvol, '   ', yearlyvol, '   ', fivevol, '   ', tenvol);
+
+                    $("#spreaddaily").text(dailyvol);
+                    $("#spreadweekly").text(weeklyvol);
+                    $("#spreadmonthly").text(monthlyvol);
+                    $("#spreadyearly").text(yearlyvol);
+                    $("#spread5yrs").text(fivevol);
+                    $("#spread10yrs").text(tenvol);
+
+
+                }).catch((err) => {
+                    console.log(err);
+                });
+
+            }).catch((err) => {
+                console.log(err);
+            })
 
 
 
@@ -420,14 +491,14 @@ $(document).ready(function(){
             */
           
     
-          }).catch((err) => {
+        }).catch((err) => {
             console.log(err);
-          });
+        });
           
     
-      }).catch((err) => {
-          console.log(err);
-      })
+    }).catch((err) => {
+        console.log(err);
+    })
 
   
   /*
@@ -461,7 +532,7 @@ $(document).ready(function(){
     */
     
 
-    });
+});
 
 
 

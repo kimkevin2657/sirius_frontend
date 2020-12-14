@@ -1,0 +1,294 @@
+
+{% extends 'layout.html' %}
+
+{% block body %}
+
+<style>
+  .switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+}
+
+/* Hide default HTML checkbox */
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* The slider */
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+input:checked + .slider {
+  background-color: #2196F3;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
+  transform: translateX(26px);
+}
+
+/* Rounded sliders */
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+</style>
+
+
+
+
+{% from "includes/_formhelpers.html" import render_field %}
+  <h1>Dashboard <small> Welcome {{session.name}}</small></h1>
+
+    <p>
+      <input type="submit" class="btn btn-primary" value="Save" id='savebutton'>
+    </p>
+    <p>
+      type in these fields to apply for everyone
+    </p>
+    <p>
+      <input type="text" class="massmirrorone" placeholder="first mirror stock">
+      <input type="text" class="massmirrortwo" placeholder="second mirror stock">
+    </p>
+    <hr>
+    <table class="table table-striped">
+      <tr>
+        <th>index</th>
+        <th>user id</th>
+        <th>name</th>
+        <th>username</th>
+        <th>email</th>
+        <th>mirror one</th>
+        <th>mirror two</th>
+        <th>oracle status</th>
+        <th>superuser status</th>
+      </tr>
+
+      {% for user in users %}
+        <tr>
+          <td>
+            {{user.index}}
+          </td>
+          <td>
+            {{user.ids}}
+          </td>
+          <td>
+            {{user.name }}
+          </td>
+          <td>
+            {{user.username}}
+          </td>
+          <td>
+            {{user.email}}
+          </td>
+          <td>
+            <input id='mirrorone{{user.ids}}' class='mirrorone' value="{{user.mirrorone}}" type='text'>
+          </td>
+          <td>
+            <input id='mirrortwo{{user.ids}}' class='mirrortwo' value="{{user.mirrortwo}}" type='text'>
+          </td>
+          <td>
+            {% if user.oraclestatus %}
+              <label class="switch">
+                <input type="checkbox" class='oraclebutton' id="oraclestatus{{user.ids}}" checked>
+                <span class="slider round"></span>
+              </label>
+            {% else %}
+              <label class="switch">
+                <input type="checkbox" class='oraclebutton' id="oraclestatus{{user.ids}}">
+                <span class="slider round"></span>
+              </label>
+            {% endif %}
+          </td>
+          <td>
+            {% if user.superuserstatus %}
+              <label class="switch">
+                <input type="checkbox" class="superuserbutton" id="superuserstatus{{user.ids}}" checked>
+                <span class="slider round"></span>
+              </label>
+            {% else %}
+              <label class="switch">
+                <input type="checkbox" class="superuserbutton" id="superuserstatus{{user.ids}}">
+                <span class="slider round"></span>
+              </label>
+            {% endif %}
+          </td>
+        </tr>
+      {% endfor %}
+
+
+
+
+  </table>
+
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+
+ <script type='text/javascript'> 
+  $(document).ready(function(){ 
+    $(".oraclebutton").each(function(){
+      $(this).click(function(){
+        var ids = $(this).attr('id');
+        console.log(' printing this user ids ', ids);
+        req = $.ajax({
+          url: '/oracletoggle',
+          type: 'POST',
+          data: {
+              'ids': ids,
+              csrfmiddlewaretoken: '{{csrf_token}}'
+          }
+        });
+
+      });
+    });
+
+  });
+
+ </script>
+
+<script type='text/javascript'> 
+  $(document).ready(function(){ 
+    $(".superuserbutton").each(function(){
+      $(this).click(function(){
+        var ids = $(this).attr('id');
+        console.log(' printing this user ids ', ids);
+        req = $.ajax({
+          url: '/superusertoggle',
+          type: 'POST',
+          data: {
+              'ids': ids,
+              csrfmiddlewaretoken: '{{csrf_token}}'
+          }
+        });
+      });
+    });
+
+  });
+
+ </script>
+
+ <script type='text/javascript'>
+  $(document).ready(function(){
+    $("#savebutton").click(function(){
+
+      var massmirrorone = $(".massmirrorone").val();
+      var massmirrortwo = $(".massmirrortwo").val();
+      if (massmirrorone == "" || massmirrorone == undefined || massmirrortwo == "" || massmirrortwo == undefined){
+
+    
+        var mirroronelist = [];
+        var mirrortwolist = [];
+        /*
+        mirroronelist = Array.prototype.slice.call(document.querySelectorAll('.mirrorone')).map(function ( element ) {
+          return [element.id, element.value];
+        });
+        mirrortwolist = Array.prototype.slice.call(document.querySelectorAll('.mirrorone')).map(function ( element ) {
+            return [element.id, element.value];
+        });
+        */
+
+          
+        
+        $(".mirrorone").each(function(){
+          var currids = $(this).attr('id');
+          var currval = $(this).val();
+          var curronelist = [currids, currval];
+          mirroronelist.push(curronelist);
+        });
+        $(".mirrortwo").each(function(){
+          var currids = $(this).attr('id');
+          var currval = $(this).val();
+          var curronelist = [currids, currval];
+          mirrortwolist.push(curronelist);
+        });
+        
+        
+        dataval = {
+          "mirrorone": mirroronelist,
+          "mirrortwo": mirrortwolist,
+          csrfmiddlewaretoken: "{{csrf_token}}"
+        }
+        
+        console.log(" printing mirroronelist  ", mirroronelist);
+        console.log(" printing mirrortwolist  ", mirrortwolist);
+        req = $.ajax({
+          url: '/mirrorupdate',
+          type: 'POST',
+  //        contentType: "application/json",
+          contentType: "application/json; charset=utf-8",
+  //        dataType: "JSON",
+
+          data: JSON.stringify(dataval),
+          /*
+          data: {
+            'mirrorone': mirroronelist,
+            'mirrortwo': mirrortwolist,
+            csrfmiddlewaretoken: '{{csrf_token}}'
+          }
+          */
+        })
+        req.done(function(data){
+          if (data.result == 1){
+            location.reload();
+          }
+        })
+      }
+      if (massmirrorone != "" && massmirrorone != undefined && massmirrortwo != "" && massmirrortwo != undefined){
+        req = $.ajax({
+          url: '/massmirrorupdate',
+          type: 'POST',
+          data:{
+            'mirrorone': massmirrorone,
+            'mirrortwo': massmirrortwo,
+            csrfmiddlewaretoken: "{{csrf_token}}"
+          }
+        })
+        req.done(function(data){
+          if (data.result == 1){
+            location.reload();
+          }
+        })
+
+      }
+
+    });
+  });
+</script>
+
+
+
+{% endblock %}

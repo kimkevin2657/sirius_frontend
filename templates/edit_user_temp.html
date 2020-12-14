@@ -3,7 +3,7 @@
 
 {% block body %}
 {% from "includes/_formhelpers.html" import render_field %}
-  <h1>Dashboard <small> Welcome {{session.username}}</small></h1>
+  <h1>Dashboard <small> Welcome {{session.name}}</small></h1>
   <form method='POST'>
     <p><input type="submit" class="btn btn-primary" value="Save"></p>
     <hr>

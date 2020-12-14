@@ -1,7 +1,7 @@
 {% extends 'layout.html' %}
 
 {% block body %}
-  <h1>Workspace <small> Welcome {{session.username}}</small>
+  <h1>Workspace <small> Welcome {{session.name}}</small>
     <form action='' method='POST'>
       <input type='submit' name='tradingaccount' value='Trading Account' class="btn btn-success searchbutton2">
       </form>
@@ -141,33 +141,33 @@
   </table>
 
   <div class='parentchartdiv'> 
-    <div class='chart' id="tradingview_f6874"></div>
-    <div class='chart' id="tradingview_f6875"></div>
+    <div class='chart' id="tradingview_f6874" name='{{firststock}}'></div>
+    <div class='chart' id="tradingview_f6875" name='{{secondstock}}'></div>
     <div class='chart' id="tradingview_f6876"></div>
     <table class="head">
       <tr>
-          <td>"{{firststock.stock}}"  PE Ratio</td>
-          <td>{{firststock.PEratio}}</td>
-          <td>"{{firststock.stock}}"  PEG Ratio</td>
-          <td>{{firststock.PEGratio}}</td>
-          <td>"{{firststock.stock}}"  future PE Ratio</td>
-          <td>{{firststock.futurePEratio}}</td>
-          <td>"{{firststock.stock}}"  future PEG Ratio</td>
-          <td>{{firststock.futurePEGratio}}</td>
-          <td>"{{firststock.stock}}"  beta</td>
-          <td>{{firststock.beta}}</td>
-      </tr>
-      <tr>
-        <td>"{{secondstock.stock}}"  PE Ratio</td>
-        <td>{{secondstock.PEratio}}</td>
-        <td>"{{secondstock.stock}}"  PEG Ratio</td>
-        <td>{{secondstock.PEGratio}}</td>
-        <td>"{{secondstock.stock}}"  future PE Ratio</td>
-        <td>{{secondstock.futurePEratio}}</td>
-        <td>"{{secondstock.stock}}"  future PEG Ratio</td>
-        <td>{{secondstock.futurePEGratio}}</td>
-        <td>"{{secondstock.stock}}"  beta</td>
-        <td>{{secondstock.beta}}</td>
+        <td id="firststockPEratio"></td>
+        <td id="firststockPEratioval"></td>
+        <td id="firststockPEGratio"></td>
+        <td id="firststockPEGratioval"></td>
+        <td id="firststockfuturePEratio"></td>
+        <td id="firststockfuturePEratioval"></td>
+        <td id="firststockfuturePEGratio"></td>
+        <td id="firststockfuturePEGratioval"></td>
+        <td id="firststockbeta"></td>
+        <td id="firststockbetaval"></td>
+    </tr>
+    <tr>
+      <td id="secondstockPEratio"></td>
+      <td id="secondstockPEratioval"></td>
+      <td id="secondstockPEGratio"></td>
+      <td id="secondstockPEGratioval"></td>
+      <td id="secondstockfuturePEratio"></td>
+      <td id="secondstockfuturePEratioval"></td>
+      <td id="secondstockfuturePEGratio"></td>
+      <td id="secondstockfuturePEGratioval"></td>
+      <td id="secondstockbeta"></td>
+      <td id="secondstockbetaval"></td>
       </tr>
     </table>
     <table>

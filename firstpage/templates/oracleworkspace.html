@@ -2,7 +2,7 @@
 
 {% block body %}
   <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/highcharts.css') }}"> 
-  <h1>Workspace <small> Welcome {{session.username}}</small>
+  <h1>Workspace <small> Welcome {{session.name}}</small>
     <form action='' method='POST'>
       <input type='submit' name='tradingaccount' value='Trading Account' class="btn btn-success searchbutton2">
       </form>
