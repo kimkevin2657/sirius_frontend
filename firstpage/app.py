@@ -10,15 +10,20 @@ import numpy as np
 from flask import jsonify
 import random
 import requests
-import psycopg2
+#import psycopg2
 
-DB_NAME = 'mvp'
-DB_USER = 'postgres'
-DB_PASS = 'oracle'
-DB_HOST = 'localhost'
-DB_PORT = '5432'
+#DB_NAME = 'mvp'
+#DB_USER = 'postgres'
+#DB_PASS = 'oracle'
+#DB_HOST = 'localhost'
+#DB_PORT = '5432'
 
-conn = psycopg2.connect(database=DB_NAME,user=DB_USER,password=DB_PASS,host=DB_HOST,port=DB_PORT)
+#conn = psycopg2.connect(database=DB_NAME,user=DB_USER,password=DB_PASS,host=DB_HOST,port=DB_PORT)
+
+import mysql.connector
+conn = mysql.connector.connect(user='Kateryna', password='Kateryna',
+                              host='localhost',
+                              database='mvp')
 
 def dbmodel(tablename, columns=None, idval=None):
     cur = conn.cursor()
