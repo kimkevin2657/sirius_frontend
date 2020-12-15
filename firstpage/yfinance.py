@@ -2,6 +2,7 @@ import pandas as pd
 import datetime as dt
 from yfinance import Ticker
 from flask_cors import CORS
+#from flask.ext.cors import CORS, cross_origin
 from flask import Flask, render_template, flash, redirect, url_for, session, request, logging, jsonify
 #from data import Articles
 from wtforms import Form, StringField, TextAreaField, PasswordField, validators
@@ -15,13 +16,17 @@ from flask import jsonify
 import random
 from datetime import timezone
 import datetime
+import yahoo_fin.stock_info as si
+# pip install yahoo_fin
+# pip install requests_html
 # pip install lxml
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, support_credentials=True, resources={r"/.*": {"origins": "*"}})
 
 
 @app.route('/historical', methods=['GET', 'POST'])
+#@cross_origin(supports_credentials=True)
 def historical():
     if request.method == 'POST':
         data = json.loads(request.data)
@@ -58,9 +63,16 @@ def historical():
             timestamp = int(dt.replace(tzinfo=timezone.utc).timestamp())
             data['date'][i] = timestamp
 
-        return jsonify(data)
+        outputdata = jsonify(data)
+
+        outputdata.headers.add("Access-Control-Allow-Origin", "*")
+        outputdata.headers.add("Access-Control-Allow-Headers", "*")
+        outputdata.headers.add("Access-Control-Allow-Methods", "*")
+
+        return outputdata
 
 @app.route("/info", methods=['GET', 'POST'])
+#@cross_origin(supports_credentials=True)
 def companyinfo():
     if request.method == 'POST':
         stock = ''
@@ -102,9 +114,26 @@ def companyinfo():
         except Exception as ex:
             print(ex)
 
-        return jsonify(data)
+        try:
+            val = si.get_quote_table(stock)
+        except Exception as ex:
+            print(ex)
+        try:
+            data["PEratio"] = val["PE Ratio (TTM)"]
+        except Exception as ex:
+            print(ex)
+
+
+        outputdata = jsonify(data)
+
+        outputdata.headers.add("Access-Control-Allow-Origin", "*")
+        outputdata.headers.add("Access-Control-Allow-Headers", "*")
+        outputdata.headers.add("Access-Control-Allow-Methods", "*")
+
+        return outputdata
 
 @app.route('/historicaltest', methods=['GET', 'POST'])
+#@cross_origin(supports_credentials=True)
 def historicaltest():
     if request.method == 'GET':
         obj = ''
@@ -136,7 +165,10 @@ def historicaltest():
             timestamp = int(dt.replace(tzinfo=timezone.utc).timestamp())
             data['date'][i] = timestamp
 
-        return jsonify(data)
+        outputdata = jsonify(data)
+        outputdata.headers.add("Access-Control-Allow-Origin", "*")
+
+        return outputdata
 
 
 if __name__ == '__main__':

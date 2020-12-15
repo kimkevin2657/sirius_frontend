@@ -72,7 +72,8 @@ $(document).ready(function(){
       console.log(" post data   ", postdata);
       axios({
         method: 'post',
-        url: 'http://127.0.0.1:5050/historical',
+//        url: 'http://127.0.0.1:8000/historical',
+        url: '/historical',
         data: postdata,
         headers: {"Content-Type": "application/json"}
       }).then((data) => {
@@ -113,7 +114,8 @@ $(document).ready(function(){
     
         axios({
             method: 'post',
-            url: 'http://127.0.0.1:5050/historical',
+//            url: 'http://127.0.0.1:8000/historical',
+            url: '/historical',
             data: postdata2,
             headers: {"Content-Type": "application/json"}
           }).then((data2) => {
@@ -235,10 +237,58 @@ $(document).ready(function(){
             });
             */
       
-      
+            var spreadname = firstsymbol.toUpperCase() + " / " + secondsymbol.toUpperCase() + " Spread";
         
-
-
+            Highcharts.stockChart('tradingview_f6876', {
+              navigation: {
+                  bindings: {
+                      rect: {
+                          annotationsOptions: {
+                              shapeOptions: {
+                                  fill: 'rgba(255, 0, 0, 0.8)'
+                              }
+                          }
+                      }
+                  },
+                  annotationsOptions: {
+                      typeOptions: {
+                          line: {
+                              stroke: 'rgba(255, 0, 0, 1)',
+                              strokeWidth: 10
+                          }
+                      }
+                  }
+              },
+              yAxis: [{
+                  labels: {
+                      align: 'left'
+                  },
+                  height: '80%'
+              }, {
+                  labels: {
+                      align: 'left'
+                  },
+                  top: '80%',
+                  height: '20%',
+                  offset: 0
+              }],
+              series: [{
+                  type: 'line',
+                  id: 'spread-ohlc',
+                  name: spreadname,
+                  data: chartdata2
+              }
+              /* {
+                  type: 'column',
+                  id: 'aapl-volume',
+                  name: 'AAPL Volume',
+                  data: volume,
+                  yAxis: 1
+              }
+              */
+              
+              ]
+          });
             
 
 
@@ -246,7 +296,7 @@ $(document).ready(function(){
 
 
 
-            
+            /*
             Highcharts.chart('tradingview_f6876', {
                 chart: {
                     zoomType: 'x'
@@ -295,6 +345,7 @@ $(document).ready(function(){
                     data: chartdata2
                 }]
             });
+            */
             
 
 
@@ -305,7 +356,8 @@ $(document).ready(function(){
         
             axios({
                 method: 'post',
-                url: 'http://127.0.0.1:5050/info',
+//                url: 'http://127.0.0.1:8000/info',
+                url: '/info',
                 data: postdata3,
                 headers: {"Content-Type": "application/json"}
               }).then((data3) => {
@@ -333,7 +385,8 @@ $(document).ready(function(){
 
                 axios({
                   method: 'post',
-                  url: 'http://127.0.0.1:5050/info',
+//                  url: 'http://127.0.0.1:8000/info',
+                  url: '/info',
                   data: postdata4,
                   headers: {"Content-Type": "application/json"}
                 }).then((data4) => {

@@ -10,15 +10,26 @@ import numpy as np
 from flask import jsonify
 import random
 import requests
-import psycopg2
+#import psycopg2
+import yahoo_fin.stock_info as si
+from yfinance import Ticker
+from datetime import timezone
+import datetime
+import pandas as pd
+import datetime as dt
 
-DB_NAME = 'mvp'
-DB_USER = 'postgres'
-DB_PASS = 'oracle'
-DB_HOST = 'localhost'
-DB_PORT = '5432'
+#DB_NAME = 'mvp'
+#DB_USER = 'postgres'
+#DB_PASS = 'oracle'
+#DB_HOST = 'localhost'
+#DB_PORT = '5432'
 
-conn = psycopg2.connect(database=DB_NAME,user=DB_USER,password=DB_PASS,host=DB_HOST,port=DB_PORT)
+#conn = psycopg2.connect(database=DB_NAME,user=DB_USER,password=DB_PASS,host=DB_HOST,port=DB_PORT)
+
+import mysql.connector
+conn = mysql.connector.connect(user='Kateryna', password='Kateryna',
+                              host='localhost',
+                              database='mvp')
 
 def dbmodel(tablename, columns=None, idval=None):
     cur = conn.cursor()
@@ -240,7 +251,7 @@ def editprofile():
         secret = request.form['secret']
         ids = int(session['ids'])
         cur = conn.cursor()
-        cur.execute("UPDATE userinfo SET (name, username, email, apikey, secret) = (%s, %s, %s, %s, %s) WHERE id = %s", (name, username, email, apikey, secret, ids))
+        cur.execute("UPDATE userinfo SET name = %s, username = %s, email = %s, apikey = %s, secret = %s WHERE id = %s", (name, username, email, apikey, secret, ids))
         conn.commit()
         cur.close()
         return redirect(url_for("editprofile"))
@@ -404,9 +415,163 @@ def massmirrorupdate():
         if len(userinfo) != 0:
             for i in range(0,len(userinfo)):
                 userid = userinfo[i][0]
-                cur.execute("UPDATE userinfo SET (mirrorone, mirrortwo) = (%s, %s) WHERE id = %s", (mirrorone, mirrortwo, userid))
+                cur.execute("UPDATE userinfo SET mirrorone = %s, mirrortwo = %s WHERE id = %s", (mirrorone, mirrortwo, userid))
                 conn.commit()
         return jsonify({"result": 1})
+
+@app.route('/historical', methods=['GET', 'POST'])
+#@cross_origin(supports_credentials=True)
+def historical():
+    if request.method == 'POST':
+        data = json.loads(request.data)
+        stock = str(data['stock'])
+        period = str(data['period'])
+        interval = str(data['interval'])
+
+        obj = ''
+        try:
+            obj = Ticker(stock)
+        except Exception as ex:
+            print(ex)
+
+        val = ''
+        try:
+            val = obj.history(period=period, interval=interval)
+            val = val.reset_index()
+        except Exception as ex:
+            print(ex)
+
+        data = dict()
+        data['date'] = val['Date'].astype(str).tolist()
+        data['open'] = val['Open'].tolist()
+        data['high'] = val['High'].tolist()
+        data['low'] = val['Low'].tolist()
+        data['close'] = val['Close'].tolist()
+        data['volume'] = val['Volume'].tolist()
+
+        for i in range(0,len(data['date'])):
+            year = data['date'][i][:4]
+            month = data['date'][i][5:7]
+            day = data['date'][i][8:]
+            dt = datetime.datetime(int(year), int(month), int(day))
+            timestamp = int(dt.replace(tzinfo=timezone.utc).timestamp())
+            data['date'][i] = timestamp
+
+        outputdata = jsonify(data)
+
+        #outputdata.headers.add("Access-Control-Allow-Origin", "*")
+        #outputdata.headers.add("Access-Control-Allow-Headers", "*")
+        #outputdata.headers.add("Access-Control-Allow-Methods", "*")
+
+        return outputdata
+
+@app.route("/info", methods=['GET', 'POST'])
+#@cross_origin(supports_credentials=True)
+def companyinfo():
+    if request.method == 'POST':
+        stock = ''
+        try:
+            stock = str(json.loads(request.data)["stock"])
+        except Exception as ex:
+            print(ex)
+
+        try:
+            stock = str(request.form["stock"])
+        except Exception as ex:
+            print(ex)
+
+        obj = ''
+        try:
+            obj = Ticker(stock)
+        except Exception as ex:
+            print(ex)
+
+        val = ''
+        try:
+            val = obj.info
+        except Exception as ex:
+            print(ex)
+
+        data = dict()
+        try:
+            data["PEGratio"] = val["pegRatio"]
+            data["futurePEGratio"] = val["pegRatio"]
+        except Exception as ex:
+            print(ex)
+        try:
+            data["futurePEratio"] = val["forwardPE"]
+            data["PEratio"] = val["forwardPE"]
+        except Exception as ex:
+            print(ex)
+        try:
+            data["beta"] = val["beta"]
+        except Exception as ex:
+            print(ex)
+
+        try:
+            val = si.get_quote_table(stock)
+        except Exception as ex:
+            print(ex)
+        try:
+            data["PEratio"] = val["PE Ratio (TTM)"]
+        except Exception as ex:
+            print(ex)
+
+
+        outputdata = jsonify(data)
+
+        #outputdata.headers.add("Access-Control-Allow-Origin", "*")
+        #outputdata.headers.add("Access-Control-Allow-Headers", "*")
+        #outputdata.headers.add("Access-Control-Allow-Methods", "*")
+
+        return outputdata
+
+@app.route('/historicaltest', methods=['GET', 'POST'])
+#@cross_origin(supports_credentials=True)
+def historicaltest():
+    if request.method == 'GET':
+        obj = ''
+        try:
+            obj = Ticker('msft')
+        except Exception as ex:
+            print(ex)
+
+        val = ''
+        try:
+            val = obj.history(period='max', interval='1d')
+            val = val.reset_index()
+        except Exception as ex:
+            print(ex)
+
+        data = dict()
+        data['date'] = val['Date'].astype(str).tolist()
+        data['open'] = val['Open'].tolist()
+        data['high'] = val['High'].tolist()
+        data['low'] = val['Low'].tolist()
+        data['close'] = val['Close'].tolist()
+        data['volume'] = val['Volume'].tolist()
+
+        for i in range(0,len(data['date'])):
+            year = data['date'][i][:4]
+            month = data['date'][i][5:7]
+            day = data['date'][i][8:]
+            dt = datetime.datetime(int(year), int(month), int(day))
+            timestamp = int(dt.replace(tzinfo=timezone.utc).timestamp())
+            data['date'][i] = timestamp
+
+        outputdata = jsonify(data)
+        #outputdata.headers.add("Access-Control-Allow-Origin", "*")
+
+        return outputdata
+
+
+
+
+
+
+
+
+
 
 @app.route("/positionall", methods=['GET', 'POST'])
 @is_logged_in
